@@ -1,0 +1,19 @@
+spark-submit --class com.aaa.ScalaS.WC --master local[4] StreamS-0.0.1-SNAPSHOT.jar /user/xx68746/input.txt 
+
+spark-submit --class com.spark.drw.MergeFilesQdt Spark-0.0.1-DRW.jar q --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.DRWCopyFiles Spark-0.0.1-DRW.jar q --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.CIMSparkCode Spark-0.0.1-DRW.jar q tableName --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.TestFiles_1 Spark-0.0.1-DRW.jar drw_prjct_sts_1 --spark.yarn.queue root.drw.med --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.TestFiles_1 Spark-0.0.1-DRW.jar drw_prjct_sts_2 --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.MergeFilesText Spark-0.0.1-DRW.jar q drw_prjct_sts_1 --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.DRWCopyFiles_1 Spark-0.0.1-DRW.jar q drw_prjct_sts_test_1 --files /etc/hive/conf/hive-site.xml
+
+spark-submit --class com.spark.stream.SparkKafkaLog Spark-0.0.1-CIM.jar --files /etc/hive/conf/hive-site.xml
+
+
