@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="spark_workflow">
+	<global>
+		<job-tracker>${jobTracker}</job-tracker>
+		<name-node>${nameNode}</name-node>
+		<configuration>
+			<property>
+				<name>oozie.use.system.libpath</name>
+				<value>true</value>
+			</property>
+			<property>
+				<name>mapreduce.job.acl-view-job</name>
+				<value>*</value>
+			</property>
+		</configuration>
+	</global>
+
+	<credentials>
+		<credential name='hive_credentials' type='hive2'>
+			<property>
+				<name>hcat.metastore.uri</name>
+				<value>${hcatServer}</value>
+			</property>
+			<property>
+				<name>hive2.jdbc.url</name>
+				<value>${hive2JDBC}</value>
+			</property>
+			<property>
+				<name>hive2.server.principal</name>
+				<value>${hive2Principal}</value>
+			</property>
+		</credential>
+	</credentials>
+
+	<start to="first_spark" />
+	<action name="first_spark" cred="hive_credentials">
+		<spark xmlns="uri:oozie:spark-action:0.1">
+			<job-tracker>${jobTracker}</job-tracker>
+			<name-node>${nameNode}</name-node>
+			<master>yarn</master>
+			<mode>cluster</mode>
+			<name>SparkWorkflow</name>
+			<class>com.spark.drw.CIMSparkCode</class>
+			<jar>${nameNode}/user/pl24116/spark_wf/Spark-0.0.1-CIM.jar</jar>
+			<spark-opts> --files /etc/hive/conf/hive-site.xml  --executor-memory
+				${exec_mem} --driver-memory ${driver_mem} --queue ${queue}
+				--num-executors ${num_exec}</spark-opts>
+		</spark>
+		<ok to="end" />
+		<error to="fail" />
+	</action>
+	<kill name="fail">
+		<message>Load failed, error
+			message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+	</kill>
+	<end name="end" />
+</workflow-app>
