@@ -1,0 +1,75 @@
+package com.spark.drw
+
+import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.hadoop.fs._
+import org.apache.hadoop.conf.Configuration
+import scala.collection.mutable.ListBuffer
+import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.Column
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.expressions.Window
+
+import scala.sys.process._
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import org.apache.spark.sql.Column
+import org.apache.spark.sql.SaveMode
+
+
+object SampleSparkSQL {
+  def main (args : Array[String]): Unit ={
+     
+      val conf = new SparkConf().setAppName("CIM Offers Final")
+      val sc = new SparkContext(conf)
+
+      val hiveContext : HiveContext = new HiveContext(sc)
+      hiveContext.setConf("spark.sql.parquet.binaryAsString", "true")
+      hiveContext.setConf("spark.sql.parquet.compression.codec","snappy")
+      
+      val srcTargetDir  = "/bdpq/bdh/01/str/raw/bdhhd01q_efg_ifi_raw/"
+      
+      val employeeTable = "employee"
+      val tableHDFSDir = srcTargetDir+"/"+employeeTable
+      
+      println(tableHDFSDir)
+      val employeeDF = hiveContext.read.parquet(tableHDFSDir)
+      println("Count :"+employeeDF.count())
+
+      val deptTable  = "dept"
+      val deptHDFSDir = srcTargetDir+"/"+deptTable
+      val deptDF = hiveContext.read.parquet(deptHDFSDir)
+      println("Count :"+deptDF.count())
+      
+      val deptAddrTable  = "deptaddress"
+      val deptAddrHDFSDir = srcTargetDir+"/"+deptAddrTable
+      val deptAddrDF = hiveContext.read.parquet(deptAddrHDFSDir)
+      println("Count :"+deptAddrDF.count())
+      
+      
+      val empDeptDF = employeeDF.join(deptDF, employeeDF("id") === deptDF("id"),"left_outer" ).select( employeeDF("id").alias("empid"), deptDF("deptid").alias("deptid"), deptDF("deptname").alias("deptname"))
+      
+      val deptAddrDF1 = empDeptDF.join(deptAddrDF, empDeptDF("deptid") === deptAddrDF("deptid"), "left_outer").select(empDeptDF("empid").alias("empid"), empDeptDF("deptid").alias("deptid"), empDeptDF("deptname").alias("deptname"),deptAddrDF("deptid").alias("deptAddrid"), deptAddrDF("deptaddr").alias("deptaddr") )
+           
+      val returnAddrValue = (deptAddr: String) => {
+        var temp = deptAddr
+        if (deptAddr == null) {
+          temp = "Canada"
+        }
+        else temp
+        
+        temp
+      }
+      val returnAddrValueFunc = udf(returnAddrValue)
+      
+      val df1 = deptAddrDF1.groupBy(deptAddrDF1("deptaddr"), deptAddrDF1("deptid")).count().select(returnAddrValueFunc(deptAddrDF1("deptaddr")).alias("deptAddress") , deptAddrDF1("deptid"))
+      
+      deptAddrDF1.write.mode(SaveMode.Overwrite).save(srcTargetDir+"/departmentaddress")
+        
+      println("empDeptDF :"+empDeptDF.count())
+
+  }
+}
