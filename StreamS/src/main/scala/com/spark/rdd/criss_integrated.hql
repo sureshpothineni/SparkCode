@@ -1,0 +1,2000 @@
+set hive.exec.dynamic.partition.mode=nonstrict;
+
+SET mapred.compress.map.output=true ;
+SET mapreduce.output.fileoutputformat.compress.type=BLOCK;
+SET mapred.map.output.compression.codec=org.apache.hadoop.io.compress.SnappyCodec;
+
+set parquet.compression=snappy;
+set hive.merge.mapfiles=true;
+set hive.merge.mapredfiles=true;
+set hive.merge.smallfiles.avgsize=134217728;
+set hive.merge.size.per.task=209715200;
+
+set mapred.job.queue.name='root.bdh.med';
+
+use ${hv_db_efgifi};
+
+insert overwrite table criss_index partition (load_date)
+select 
+criss_integrated.mct_problem_date
+,criss_integrated.mct_problem_time
+,criss_integrated.mct_reference_no
+,criss_integrated.mct_bank_number
+,criss_integrated.mct_account_type
+,criss_integrated.mct_account_no
+,criss_integrated.mct_customer_id
+,criss_integrated.mct_reference_9
+,criss_integrated.mct_cust_svc_rep
+,criss_integrated.mct_csr_cc
+,criss_integrated.mct_customer_name
+,criss_integrated.mct_customer_type
+,criss_integrated.mct_ssn_tin
+,criss_integrated.mct_addr_line_1
+,criss_integrated.mct_addr_line_2
+,criss_integrated.mct_addr_line_3
+,criss_integrated.mct_addr_line_4
+,criss_integrated.mct_addr_line_5
+,criss_integrated.mct_city
+,criss_integrated.mct_state
+,criss_integrated.mct_zip
+,criss_integrated.mct_status
+,criss_integrated.mct_input_mode
+,criss_integrated.mct_product_group
+,criss_integrated.mct_product_detail
+,criss_integrated.mct_reason_group
+,criss_integrated.mct_reason_detail
+,criss_integrated.mct_amount
+,criss_integrated.mct_dr_cr_ind
+,criss_integrated.mct_branch_number
+,criss_integrated.mct_contact_date
+,criss_integrated.mct_contact_time
+,criss_integrated.mct_resolution
+,criss_integrated.mct_root_cause
+,criss_integrated.mct_resolved_date
+,criss_integrated.mct_resolved_time
+,criss_integrated.mct_refund_action
+,criss_integrated.mct_resolved_by
+,criss_integrated.mct_sec_rsch_assigned
+,criss_integrated.mct_contact_interface
+,criss_integrated.mct_settlement_bank
+,criss_integrated.mct_settlement_branch
+,criss_integrated.mct_tda_acct_no
+,criss_integrated.mct_request_no
+,criss_integrated.mct_source_system
+
+,criss_integrated.reference_number
+,criss_integrated.cdaf074_clsreby
+,criss_integrated.cdaf074_rname
+,criss_integrated.cdaf074_name_1
+,criss_integrated.cdaf074_name_2
+,criss_integrated.cdaf074_name_3
+,criss_integrated.cdaf074_addr_1
+,criss_integrated.cdaf074_addr_2
+,criss_integrated.cdaf074_city
+,criss_integrated.cdaf074_state
+,criss_integrated.cdaf074_zip5
+,criss_integrated.cdaf074_pymt_mth
+,criss_integrated.cdaf074_pymt_dsc
+,criss_integrated.cdaf074_xfr_acct
+,criss_integrated.cdaf074_xfr_type
+,criss_integrated.cdaf074_xfr_mkt
+,criss_integrated.cdaf074_lgltitl1
+,criss_integrated.cdaf074_lgltitl2
+,criss_integrated.cdaf074_errmsg_l
+,criss_integrated.cdaf075_totwd5
+,criss_integrated.cdaf075_totaia5
+,criss_integrated.cdaf075_totpen5
+,criss_integrated.cdaf075_totclwd5
+,criss_integrated.cdaf075_wd5_01
+,criss_integrated.cdaf075_accrint5
+,criss_integrated.cdaf075_pen5
+,criss_integrated.cdaf075_wvereas5_01
+,criss_integrated.cdaf075_wvereas5_02
+,criss_integrated.cdaf075_wvereas5_03
+,criss_integrated.cdaf076_wvereas6_01
+,criss_integrated.cdaf076_wvereas6_02
+,criss_integrated.cdaf076_wvereas6_03
+,criss_integrated.cdaf077_wvereas7_01
+,criss_integrated.cdaf077_wvereas7_02
+,criss_integrated.cdaf077_wvereas7_03
+,criss_integrated.reaf074_clsrby
+,criss_integrated.reaf074_rname
+,criss_integrated.reaf074_name_1
+,criss_integrated.reaf074_name_2
+,criss_integrated.reaf074_name_3
+,criss_integrated.reaf074_addr_1
+,criss_integrated.reaf074_addr_2
+,criss_integrated.reaf074_city
+,criss_integrated.reaf074_state
+,criss_integrated.reaf074_zip5
+,criss_integrated.reaf074_pymt_mth
+,criss_integrated.reaf074_pymt_dsc
+,criss_integrated.reaf074_xfr_acct
+,criss_integrated.reaf074_xfr_type
+,criss_integrated.reaf074_xfr_mkt
+,criss_integrated.reaf075_totwd5
+,criss_integrated.reaf075_totaia5
+,criss_integrated.reaf075_totpen5
+,criss_integrated.reaf075_totclwd5
+,criss_integrated.reaf075_acct5
+,criss_integrated.reaf075_prd5
+,criss_integrated.reaf075_matdt5
+,criss_integrated.reaf075_wd5
+,criss_integrated.reaf075_accrint5
+,criss_integrated.reaf075_pen5
+,criss_integrated.reaf075_wvereas5
+,criss_integrated.reaf075_clwd5
+,criss_integrated.reaf075_wd5_01
+,criss_integrated.reaf075_wd5_02
+,criss_integrated.reaf075_wd5_03
+,criss_integrated.reaf075_wd5_031
+,criss_integrated.reaf076_wd6_01
+,criss_integrated.reaf076_wd6_02
+,criss_integrated.reaf076_wd6_03
+,criss_integrated.reaf076_wvereas6_01
+,criss_integrated.reaf076_wvereas6_02
+,criss_integrated.reaf076_wvereas6_03
+,criss_integrated.reaf077_wd7_01
+,criss_integrated.reaf077_wd7_02
+,criss_integrated.reaf077_wd7_03
+,criss_integrated.reaf077_wvereas7_01
+,criss_integrated.reaf077_wvereas7_02
+,criss_integrated.reaf077_wvereas7_03
+,criss_integrated.ddaf151_acctdbtd
+,criss_integrated.ddaf151_amount
+,criss_integrated.ddaf151_paybleto
+,criss_integrated.ddaf151_mailto1
+,criss_integrated.ddaf151_mailto2
+,criss_integrated.ddaf151_mailto3
+,criss_integrated.cdaf083_pymtmthd
+,criss_integrated.cdaf083_term
+,criss_integrated.accf004_date
+,criss_integrated.accf004_time
+,criss_integrated.ddaf054_name_1
+,criss_integrated.ddaf054_name_2
+,criss_integrated.ddaf054_name_3
+,criss_integrated.ddaf054_addr_1
+,criss_integrated.ddaf054_addr_2
+,criss_integrated.ddaf054_city
+,criss_integrated.ddaf054_state
+,criss_integrated.ddaf054_zip5
+,criss_integrated.ddaf054_pymt_mth
+,criss_integrated.ddaf054_pymt_dsc
+,criss_integrated.ddaf054_xfr_acct
+,criss_integrated.ddaf054_xfr_type
+,criss_integrated.ddaf054_xfr_mkt
+,criss_integrated.ddaf054_rname
+,criss_integrated.ddaf055_acct
+,criss_integrated.ddaf055_ledgbal
+,criss_integrated.ddaf055_closebal
+,criss_integrated.cdaf058_opendt
+,criss_integrated.cdaf058_openamt
+,criss_integrated.cdaf058_acctnum
+,criss_integrated.cdaf061_acctnbr
+,criss_integrated.cdaf061_dtewdcl
+,criss_integrated.cdaf061_trans
+,criss_integrated.cdaf061_trandes
+,criss_integrated.cdaf061_amtwdcl
+,criss_integrated.cdaf061_pnltyamt
+,criss_integrated.cdaf061_withhld
+,criss_integrated.cdaf061_irafee
+,criss_integrated.cdaf071_acctnbr
+,criss_integrated.cdaf071_dtewdcl
+,criss_integrated.cdaf071_amtwdcl
+,criss_integrated.cdaf071_pnltyamt
+,criss_integrated.ddaf074_discnt
+,criss_integrated.ddaf074_custid
+,criss_integrated.ddaf074_fracct
+,criss_integrated.ddaf074_frtype
+,criss_integrated.ddaf074_frmkt
+,criss_integrated.ddaf074_frname
+,criss_integrated.ddaf074_toacct
+,criss_integrated.ddaf074_totype
+,criss_integrated.ddaf074_tomkt
+,criss_integrated.ddaf074_toname
+,criss_integrated.ddaf074_amount
+,criss_integrated.ddaf074_frequncy
+,criss_integrated.ddaf074_frqdes
+,criss_integrated.ddaf074_strtdte
+,criss_integrated.ddaf074_enddate
+,criss_integrated.ddaf071_custid
+,criss_integrated.ddaf071_fracct
+,criss_integrated.ddaf071_frtype
+,criss_integrated.ddaf071_frmkt
+,criss_integrated.ddaf071_frname
+,criss_integrated.ddaf071_toacct
+,criss_integrated.ddaf071_totype
+,criss_integrated.ddaf071_tomkt
+,criss_integrated.ddaf071_toname
+,criss_integrated.ddaf071_amount
+,criss_integrated.ddaf071_frequncy
+,criss_integrated.ddaf071_frqdes
+,criss_integrated.ddaf071_strtdte
+,criss_integrated.ddaf071_enddate
+,criss_integrated.ddaf073_nxttrf
+,criss_integrated.ddaf073_permnt
+,criss_integrated.ddaf073_custid
+,criss_integrated.ddaf073_skptrf
+,criss_integrated.ddaf073_frbank1
+,criss_integrated.ddaf073_frtyp1
+,criss_integrated.ddaf073_frnbr1
+,criss_integrated.ddaf073_frnme1
+,criss_integrated.ddaf073_tobank1
+,criss_integrated.ddaf073_totyp1
+,criss_integrated.ddaf073_toacct1
+,criss_integrated.ddaf073_tonme1
+,criss_integrated.ddaf073_amnt1
+,criss_integrated.ddaf073_freq1
+,criss_integrated.ddaf073_frqdes1
+,criss_integrated.ddaf073_stdte1
+,criss_integrated.ddaf073_enddte1
+,criss_integrated.ddaf073_nxttrf1
+,criss_integrated.ddaf073_frbank2
+,criss_integrated.ddaf073_frtyp2
+,criss_integrated.ddaf073_fracct2
+,criss_integrated.ddaf073_frnme2
+,criss_integrated.ddaf073_tobank2
+,criss_integrated.ddaf073_totype2
+,criss_integrated.ddaf073_toacct2
+,criss_integrated.ddaf073_tonme2
+,criss_integrated.ddaf073_amnt2
+,criss_integrated.ddaf073_freq2
+,criss_integrated.ddaf073_frqdes2
+,criss_integrated.ddaf073_stdte2
+,criss_integrated.ddaf073_enddte2
+,criss_integrated.ddaf073_nxttrf2
+,criss_integrated.ddaf076_fracct
+,criss_integrated.ddaf076_frtype
+,criss_integrated.ddaf076_frmkt
+,criss_integrated.ddaf076_frname
+,criss_integrated.ddaf076_toacct
+,criss_integrated.ddaf076_totype
+,criss_integrated.ddaf076_tomkt
+,criss_integrated.ddaf076_toname
+,criss_integrated.ddaf076_amount
+,criss_integrated.ddaf076_frequncy
+,criss_integrated.ddaf076_frqdes
+,criss_integrated.ddaf076_enddate
+,criss_integrated.ddaf072_custid
+,criss_integrated.ddaf072_fracct
+,criss_integrated.ddaf072_frtype
+,criss_integrated.ddaf072_frmkt
+,criss_integrated.ddaf072_frname
+,criss_integrated.ddaf072_toacct
+,criss_integrated.ddaf072_totype
+,criss_integrated.ddaf072_tomkt
+,criss_integrated.ddaf072_toname
+,criss_integrated.ddaf072_amount
+,criss_integrated.ddaf072_frequncy
+,criss_integrated.ddaf072_frqdes
+,criss_integrated.ddaf072_strtdte
+,criss_integrated.ddaf072_enddate
+,criss_integrated.ddaf077_nxttrf
+,criss_integrated.ddaf077_permnt
+,criss_integrated.ddaf077_custid
+,criss_integrated.ddaf077_skptrf
+,criss_integrated.ddaf077_frbank1
+,criss_integrated.ddaf077_frtyp1
+,criss_integrated.ddaf077_frnbr1
+,criss_integrated.ddaf077_frnme1
+,criss_integrated.ddaf077_tobank1
+,criss_integrated.ddaf077_totyp1
+,criss_integrated.ddaf077_toacct1
+,criss_integrated.ddaf077_tonme1
+,criss_integrated.ddaf077_amnt1
+,criss_integrated.ddaf077_freq1
+,criss_integrated.ddaf077_frqdes1
+,criss_integrated.ddaf077_stdte1
+,criss_integrated.ddaf077_enddte1
+,criss_integrated.ddaf077_nxttrf1
+,criss_integrated.ddaf077_frbank2
+,criss_integrated.ddaf077_frtyp2
+,criss_integrated.ddaf077_fracct2
+,criss_integrated.ddaf077_frnme2
+,criss_integrated.ddaf077_tobank2
+,criss_integrated.ddaf077_totype2
+,criss_integrated.ddaf077_toacct2
+,criss_integrated.ddaf077_tonme2
+,criss_integrated.ddaf077_amnt2
+,criss_integrated.ddaf077_freq2
+,criss_integrated.ddaf077_frqdes2
+,criss_integrated.ddaf077_stdte2
+,criss_integrated.ddaf077_enddte2
+,criss_integrated.ddaf077_nxttrf2
+,criss_integrated.fxrf001_trftype
+,criss_integrated.fxrf001_trfamt
+,criss_integrated.fxrf001_chrgefee
+,criss_integrated.fxrf001_fracctnb
+,criss_integrated.fxrf001_frbnkid
+,criss_integrated.fxrf001_frendbal
+,criss_integrated.fxrf001_toacctnb
+,criss_integrated.fxrf001_tobnkid
+,criss_integrated.fxrf001_toendbal
+,criss_integrated.ddaf122_custname
+,criss_integrated.ddaf122_custnme2
+,criss_integrated.ddaf122_acctnbr
+,criss_integrated.ddaf122_nbrchcks
+,criss_integrated.ddaf122_feechrgd
+,criss_integrated.ddaf122_feeamt
+,criss_integrated.ddaf122_waiveapp
+,criss_integrated.clcf093_custname
+,criss_integrated.clcf093_acctnbr
+,criss_integrated.clcf093_typofchk
+,criss_integrated.clcf093_nbrofchk
+,criss_integrated.clcf093_chknbr1
+,criss_integrated.clcf093_chkamt1
+,criss_integrated.clcf093_payee1
+,criss_integrated.clcf093_chknbr2
+,criss_integrated.clcf093_chkamt2
+,criss_integrated.clcf093_payee2
+,criss_integrated.clcf093_chknbr3
+,criss_integrated.clcf093_chkamt3
+,criss_integrated.clcf093_payee3
+,criss_integrated.ciff035_chgmira
+,criss_integrated.ciff035_acctsel
+,criss_integrated.ciff035_foreign
+,criss_integrated.ciff035_oldadr1
+,criss_integrated.ciff035_oldadr2
+,criss_integrated.ciff035_oldadr3
+,criss_integrated.ciff035_oldadr4
+,criss_integrated.ciff035_oldcity
+,criss_integrated.ciff035_oldst
+,criss_integrated.ciff035_oldzip1
+,criss_integrated.ciff035_oldhph
+,criss_integrated.ciff035_oldunlst
+,criss_integrated.ciff035_oldbph
+,criss_integrated.ciff035_olddob
+,criss_integrated.ciff035_oldemplr
+,criss_integrated.ciff035_oldoccup
+,criss_integrated.ciff035_newadr1
+,criss_integrated.ciff035_newadr2
+,criss_integrated.ciff035_newadr3
+,criss_integrated.ciff035_newadr4
+,criss_integrated.ciff035_newcity
+,criss_integrated.ciff035_newst
+,criss_integrated.ciff035_newzip1
+,criss_integrated.ciff035_newhph1
+,criss_integrated.ciff035_newhph2
+,criss_integrated.ciff035_newhph3
+,criss_integrated.ciff035_newunls
+,criss_integrated.ciff035_newbph1
+,criss_integrated.ciff035_newbph2
+,criss_integrated.ciff035_newbph3
+,criss_integrated.ciff035_newdob
+,criss_integrated.ciff035_newemplr
+,criss_integrated.ciff035_newocc
+,criss_integrated.ciffb35_relcust
+,criss_integrated.ciffb35_rel1
+,criss_integrated.ciffb35_name1
+,criss_integrated.ciffb35_addr1
+,criss_integrated.csvf006_old_email_1a
+,criss_integrated.csvf006_old_email_1b
+,criss_integrated.csvf006_old_email_2a
+,criss_integrated.csvf006_old_email_2b
+,criss_integrated.csvf006_new_email_1a
+,criss_integrated.csvf006_new_email_1b
+,criss_integrated.csvf006_new_email_2a
+,criss_integrated.csvf006_new_email_2b
+,criss_integrated.ciff044_oldhph
+,criss_integrated.ciff044_oldunlst
+,criss_integrated.ciff044_oldbph
+,criss_integrated.ciff044_olddob
+,criss_integrated.ciff044_oldemplr
+,criss_integrated.ciff044_oldoccup
+,criss_integrated.ciff044_newhph1
+,criss_integrated.ciff044_newhph2
+,criss_integrated.ciff044_newhph3
+,criss_integrated.ciff044_newunls
+,criss_integrated.ciff044_newbph1
+,criss_integrated.ciff044_newbph2
+,criss_integrated.ciff044_newbph3
+,criss_integrated.ciff044_newdob
+,criss_integrated.ciff044_newemplr
+,criss_integrated.ciff044_newocc
+,criss_integrated.csvf015_lbank_01
+,criss_integrated.csvf015_ltype_01
+,criss_integrated.csvf015_lacct_01
+,criss_integrated.csvf015_rbank_01
+,criss_integrated.csvf015_rtype_01
+,criss_integrated.csvf015_racct_01
+,criss_integrated.csvf015_lbank_02
+,criss_integrated.csvf015_ltype_02
+,criss_integrated.csvf015_lacct_02
+,criss_integrated.csvf015_rbank_02
+,criss_integrated.csvf015_rtype_02
+,criss_integrated.csvf015_racct_02
+,criss_integrated.csvf015_lbank_03
+,criss_integrated.csvf015_ltype_03
+,criss_integrated.csvf015_lacct_03
+,criss_integrated.csvf015_rbank_03
+,criss_integrated.csvf015_rtype_03
+,criss_integrated.csvf015_racct_03
+,criss_integrated.csvf015_lbank_04
+,criss_integrated.csvf015_ltype_04
+,criss_integrated.csvf015_lacct_04
+,criss_integrated.csvf015_rbank_04
+,criss_integrated.csvf015_rtype_04
+,criss_integrated.csvf015_racct_04
+,criss_integrated.csvf015_lbank_05
+,criss_integrated.csvf015_ltype_05
+,criss_integrated.csvf015_lacct_05
+,criss_integrated.csvf015_rbank_05
+,criss_integrated.csvf015_rtype_05
+,criss_integrated.csvf015_racct_05
+,criss_integrated.csvf015_lbank_06
+,criss_integrated.csvf015_ltype_06
+,criss_integrated.csvf015_lacct_06
+,criss_integrated.csvf015_rbank_06
+,criss_integrated.csvf015_rtype_06
+,criss_integrated.csvf015_racct_06
+,criss_integrated.csvf015_lbank_07
+,criss_integrated.csvf015_ltype_07
+,criss_integrated.csvf015_lacct_07
+,criss_integrated.csvf015_rbank_07
+,criss_integrated.csvf015_rtype_07
+,criss_integrated.csvf015_racct_07
+,criss_integrated.csvf015_lbank_08
+,criss_integrated.csvf015_ltype_08
+,criss_integrated.csvf015_lacct_08
+,criss_integrated.csvf015_rbank_08
+,criss_integrated.csvf015_rtype_08
+,criss_integrated.csvf015_racct_08
+,criss_integrated.csvf015_lbank_09
+,criss_integrated.csvf015_ltype_09
+,criss_integrated.csvf015_lacct_09
+,criss_integrated.csvf015_rbank_09
+,criss_integrated.csvf015_rtype_09
+,criss_integrated.csvf015_racct_09
+,criss_integrated.csvf015_lbank_10
+,criss_integrated.csvf015_ltype_10
+,criss_integrated.csvf015_lacct_10
+,criss_integrated.csvf015_rbank_10
+,criss_integrated.csvf015_rtype_10
+,criss_integrated.csvf015_racct_10
+,criss_integrated.csvf015_lbank_11
+,criss_integrated.csvf015_ltype_11
+,criss_integrated.csvf015_lacct_11
+,criss_integrated.csvf015_rbank_11
+,criss_integrated.csvf015_rtype_11
+,criss_integrated.csvf015_racct_11
+,criss_integrated.csvf015_lbank_12
+,criss_integrated.csvf015_ltype_12
+,criss_integrated.csvf015_lacct_12
+,criss_integrated.csvf015_rbank_12
+,criss_integrated.csvf015_rtype_12
+,criss_integrated.csvf015_racct_12
+,criss_integrated.csvf015_subtitle
+,criss_integrated.csvf016_oldttle1
+,criss_integrated.csvf016_oldttle2
+,criss_integrated.csvf016_oldttle3
+,criss_integrated.csvf016_oldttle4
+,criss_integrated.csvf016_oldttle5
+,criss_integrated.csvf016_oldttle6
+,criss_integrated.csvf016_newttle1
+,criss_integrated.csvf016_newttle2
+,criss_integrated.csvf016_newttle3
+,criss_integrated.csvf016_newttle4
+,criss_integrated.csvf016_newttle5
+,criss_integrated.csvf016_newttle6
+,criss_integrated.csvf016_ownertyp
+,criss_integrated.csvf014_add
+,criss_integrated.csvf014_change
+,criss_integrated.csvf014_delete
+,criss_integrated.csvf014_subtitle
+,criss_integrated.csvf014_lbank
+,criss_integrated.csvf014_ltype
+,criss_integrated.csvf014_lacct
+,criss_integrated.csvf014_rbank
+,criss_integrated.csvf014_rtype
+,criss_integrated.csvf014_racct
+,criss_integrated.csvf013_currnme
+,criss_integrated.csvf013_corrname
+,criss_integrated.csvf013_lbank
+,criss_integrated.csvf013_ltype
+,criss_integrated.csvf013_lacct
+,criss_integrated.csvf013_rbank
+,criss_integrated.csvf013_rtype
+,criss_integrated.csvf013_racct
+,criss_integrated.csvf088_newatt
+,criss_integrated.csvf088_newadr1
+,criss_integrated.csvf088_newadr2
+,criss_integrated.csvf088_newcity
+,criss_integrated.csvf088_newst
+,criss_integrated.csvf088_newzip1
+,criss_integrated.csvf088_newdph1
+,criss_integrated.csvf088_newdph2
+,criss_integrated.csvf088_newdph3
+,criss_integrated.csvf088_newdext
+,criss_integrated.csvf088_neweph1
+,criss_integrated.csvf088_neweph2
+,criss_integrated.csvf088_neweph3
+,criss_integrated.csvf088_newmail
+,criss_integrated.csvfa88_lmail_01
+,criss_integrated.csvfa88_lbank_01
+,criss_integrated.csvfa88_ltype_01
+,criss_integrated.csvfa88_lacct_01
+,criss_integrated.csvfa88_lemail_01
+,criss_integrated.csvfa88_rmail_01
+,criss_integrated.csvfa88_rbank_01
+,criss_integrated.csvfa88_rtype_01
+,criss_integrated.csvfa88_racct_01
+,criss_integrated.csvfa88_remail_01
+,criss_integrated.csvfa88_lmail_02
+,criss_integrated.csvfa88_lbank_02
+,criss_integrated.csvfa88_ltype_02
+,criss_integrated.csvfa88_lacct_02
+,criss_integrated.csvfa88_lemail_02
+,criss_integrated.csvfa88_rmail_02
+,criss_integrated.csvfa88_rbank_02
+,criss_integrated.csvfa88_rtype_02
+,criss_integrated.csvfa88_racct_02
+,criss_integrated.csvfa88_remail_02
+,criss_integrated.csvfa88_lmail_03
+,criss_integrated.csvfa88_lbank_03
+,criss_integrated.csvfa88_ltype_03
+,criss_integrated.csvfa88_lacct_03
+,criss_integrated.csvfa88_lemail_03
+,criss_integrated.csvfa88_rmail_03
+,criss_integrated.csvfa88_rbank_03
+,criss_integrated.csvfa88_rtype_03
+,criss_integrated.csvfa88_racct_03
+,criss_integrated.csvfa88_remail_03
+,criss_integrated.csvfa88_lmail_04
+,criss_integrated.csvfa88_lbank_04
+,criss_integrated.csvfa88_ltype_04
+,criss_integrated.csvfa88_lacct_04
+,criss_integrated.csvfa88_lemail_04
+,criss_integrated.csvfa88_rmail_04
+,criss_integrated.csvfa88_rbank_04
+,criss_integrated.csvfa88_rtype_04
+,criss_integrated.csvfa88_racct_04
+,criss_integrated.csvfa88_remail_04
+,criss_integrated.csvfa88_lmail_05
+,criss_integrated.csvfa88_lbank_05
+,criss_integrated.csvfa88_ltype_05
+,criss_integrated.csvfa88_lacct_05
+,criss_integrated.csvfa88_lemail_05
+,criss_integrated.csvfa88_rmail_05
+,criss_integrated.csvfa88_rbank_05
+,criss_integrated.csvfa88_rtype_05
+,criss_integrated.csvfa88_racct_05
+,criss_integrated.csvfa88_remail_05
+,criss_integrated.csvfa88_lmail_06
+,criss_integrated.csvfa88_lbank_06
+,criss_integrated.csvfa88_ltype_06
+,criss_integrated.csvfa88_lacct_06
+,criss_integrated.csvfa88_lemail_06
+,criss_integrated.csvfa88_rmail_06
+,criss_integrated.csvfa88_rbank_06
+,criss_integrated.csvfa88_rtype_06
+,criss_integrated.csvfa88_racct_06
+,criss_integrated.csvfa88_remail_06
+,criss_integrated.csvfa88_lmail_07
+,criss_integrated.csvfa88_lbank_07
+,criss_integrated.csvfa88_ltype_07
+,criss_integrated.csvfa88_lacct_07
+,criss_integrated.csvfa88_lemail_07
+,criss_integrated.csvfa88_rmail_07
+,criss_integrated.csvfa88_rbank_07
+,criss_integrated.csvfa88_rtype_07
+,criss_integrated.csvfa88_racct_07
+,criss_integrated.csvfa88_remail_07
+,criss_integrated.csvfa88_lmail_08
+,criss_integrated.csvfa88_lbank_08
+,criss_integrated.csvfa88_ltype_08
+,criss_integrated.csvfa88_lacct_08
+,criss_integrated.csvfa88_lemail_08
+,criss_integrated.csvfa88_rmail_08
+,criss_integrated.csvfa88_rbank_08
+,criss_integrated.csvfa88_rtype_08
+,criss_integrated.csvfa88_racct_08
+,criss_integrated.csvfa88_remail_08
+,criss_integrated.csvfa88_lmail_09
+,criss_integrated.csvfa88_lbank_09
+,criss_integrated.csvfa88_ltype_09
+,criss_integrated.csvfa88_lacct_09
+,criss_integrated.csvfa88_lemail_09
+,criss_integrated.csvfa88_rmail_09
+,criss_integrated.csvfa88_rbank_09
+,criss_integrated.csvfa88_rtype_09
+,criss_integrated.csvfa88_racct_09
+,criss_integrated.csvfa88_remail_09
+,criss_integrated.csvfa88_lmail_10
+,criss_integrated.csvfa88_lbank_10
+,criss_integrated.csvfa88_ltype_10
+,criss_integrated.csvfa88_lacct_10
+,criss_integrated.csvfa88_lemail_10
+,criss_integrated.csvfa88_rmail_10
+,criss_integrated.csvfa88_rbank_10
+,criss_integrated.csvfa88_rtype_10
+,criss_integrated.csvfa88_racct_10
+,criss_integrated.csvfa88_remail_10
+,criss_integrated.csvfa88_lmail_11
+,criss_integrated.csvfa88_lbank_11
+,criss_integrated.csvfa88_ltype_11
+,criss_integrated.csvfa88_lacct_11
+,criss_integrated.csvfa88_lemail_11
+,criss_integrated.csvfa88_rmail_11
+,criss_integrated.csvfa88_rbank_11
+,criss_integrated.csvfa88_rtype_11
+,criss_integrated.csvfa88_racct_11
+,criss_integrated.csvfa88_remail_11
+,criss_integrated.csvfa88_lmail_12
+,criss_integrated.csvfa88_lbank_12
+,criss_integrated.csvfa88_ltype_12
+,criss_integrated.csvfa88_lacct_12
+,criss_integrated.csvfa88_lemail_12
+,criss_integrated.csvfa88_rmail_12
+,criss_integrated.csvfa88_rbank_12
+,criss_integrated.csvfa88_rtype_12
+,criss_integrated.csvfa88_racct_12
+,criss_integrated.csvfa88_remail_12
+,criss_integrated.csvf089_trladr1
+,criss_integrated.csvf089_trladr2
+,criss_integrated.csvf089_trlcity
+,criss_integrated.csvf089_trlst
+,criss_integrated.csvf089_trlzip1
+,criss_integrated.csvf089_ovradr1
+,criss_integrated.csvf089_ovradr2
+,criss_integrated.csvf089_ovrcity
+,criss_integrated.csvf089_ovrst
+,criss_integrated.csvf089_ovrzip1
+,criss_integrated.csvf020_acctnbr1
+,criss_integrated.csvf020_acctnbr2
+,criss_integrated.csvf020_acctnbr3
+,criss_integrated.csvf020_acctnbr4
+,criss_integrated.csvf020_acctnbr5
+,criss_integrated.csvf020_acctnbr6
+,criss_integrated.csvf020_lglttle1
+,criss_integrated.csvf020_ssnein1
+,criss_integrated.csvf020_dob1
+,criss_integrated.csvf020_lglttle2
+,criss_integrated.csvf020_ssnein2
+,criss_integrated.csvf020_dob2
+,criss_integrated.csvf020_lgltitl3
+,criss_integrated.csvf020_ssnein3
+,criss_integrated.csvf020_dob3
+,criss_integrated.csvf020_lgltitl4
+,criss_integrated.csvf020_ssnein4
+,criss_integrated.csvf020_dob4
+,criss_integrated.csvf020_lgltitl5
+,criss_integrated.csvf020_ssnein5
+,criss_integrated.csvf020_dob5
+,criss_integrated.csvf020_lgltitl6
+,criss_integrated.csvf020_ssnein6
+,criss_integrated.csvf020_dob6
+,criss_integrated.ciffc35_trladr1
+,criss_integrated.ciffc35_trladr2
+,criss_integrated.ciffc35_trladr3
+,criss_integrated.ciffc35_trladr4
+,criss_integrated.ciffc35_trlcity
+,criss_integrated.ciffc35_trlst
+,criss_integrated.ciffc35_trlzip1
+,criss_integrated.ciffc35_ovradr1
+,criss_integrated.ciffc35_ovradr2
+,criss_integrated.ciffc35_ovradr3
+,criss_integrated.ciffc35_ovradr4
+,criss_integrated.ciffc35_ovrcity
+,criss_integrated.ciffc35_ovrst
+,criss_integrated.ciffc35_ovrzip1
+,criss_integrated.ddaf007_dbtcard
+,criss_integrated.ddaf007_exp3day
+,criss_integrated.ddaf007_exp4day
+,criss_integrated.ddaf007_exp3dayc
+,criss_integrated.ddaf007_exp4dayc
+,criss_integrated.csvf037_addrovrd
+,criss_integrated.csvf037_custatbr
+,criss_integrated.csvf037_cardnbr
+,criss_integrated.csvf037_acctnbr_01
+,criss_integrated.csvf037_accttyp_01
+,criss_integrated.csvf037_acctnbr_02
+,criss_integrated.csvf037_accttyp_02
+,criss_integrated.csvf037_acctnbr_03
+,criss_integrated.csvf037_accttyp_03
+,criss_integrated.csvf037_acctnbr_04
+,criss_integrated.csvf037_accttyp_04
+,criss_integrated.csvf037_acctnbr_05
+,criss_integrated.csvf037_accttyp_05
+,criss_integrated.csvf037_acctnbr_06
+,criss_integrated.csvf037_accttyp_06
+,criss_integrated.csvf037_acctnbr_07
+,criss_integrated.csvf037_accttyp_07
+,criss_integrated.csvf037_acctnbr_08
+,criss_integrated.csvf037_accttyp_08
+,criss_integrated.csvf037_acctnbr_09
+,criss_integrated.csvf037_accttyp_09
+,criss_integrated.csvf037_acctnbr_10
+,criss_integrated.csvf037_accttyp_10
+,criss_integrated.csvf037_acctnbr_11
+,criss_integrated.csvf037_accttyp_11
+,criss_integrated.csvf037_acctnbr_12
+,criss_integrated.csvf037_accttyp_12
+,criss_integrated.csvf038_busname
+,criss_integrated.csvf038_crdhldnm
+,criss_integrated.csvf038_authsgnr
+,criss_integrated.csvf038_address1
+,criss_integrated.csvf038_address2
+,criss_integrated.csvf038_address3
+,criss_integrated.csvf038_address4
+,criss_integrated.csvf038_city
+,criss_integrated.csvf038_state
+,criss_integrated.csvf038_zip
+,criss_integrated.csvf038_cstgnpin
+,criss_integrated.csvf038_sysgnpin
+,criss_integrated.dcaf002_crdhldnm
+,criss_integrated.dcaf003_crdhldnm
+,criss_integrated.dcaf003_scurrco
+,criss_integrated.dcaf003_currntco
+,criss_integrated.dcaf003_snewcode
+,criss_integrated.dcaf003_newcode
+,criss_integrated.dcaf004_crdhldnm
+,criss_integrated.dcaf004_newname
+,criss_integrated.dcaf004_newcard
+,criss_integrated.dcaf005_busname
+,criss_integrated.dcaf005_crdhlrnm
+,criss_integrated.dcaf005_newbusnm
+,criss_integrated.dcaf005_newcrdhl
+,criss_integrated.dcaf005_newcard
+,criss_integrated.dcaf006_addrovrd
+,criss_integrated.dcaf006_cstatbrn
+,criss_integrated.dcaf006_rtnexcrd
+,criss_integrated.dcaf006_newcrdnm
+,criss_integrated.dcaf006_newcrd
+,criss_integrated.dcaf006_cstslpin
+,criss_integrated.dcaf006_sysgnpin
+,criss_integrated.dcaf006_pinmailr
+,criss_integrated.ddaf060_postdate_01
+,criss_integrated.ddaf060_desc_01
+,criss_integrated.ddaf060_amount_01
+,criss_integrated.ddaf060_postdate_02
+,criss_integrated.ddaf060_desc_02
+,criss_integrated.ddaf060_amount_02
+,criss_integrated.ddaf060_postdate_03
+,criss_integrated.ddaf060_desc_03
+,criss_integrated.ddaf060_amount_03
+,criss_integrated.ddaf060_postdate_04
+,criss_integrated.ddaf060_desc_04
+,criss_integrated.ddaf060_amount_04
+,criss_integrated.ddaf060_postdate_05
+,criss_integrated.ddaf060_desc_05
+,criss_integrated.ddaf060_amount_05
+,criss_integrated.ddaf060_postdate_06
+,criss_integrated.ddaf060_desc_06
+,criss_integrated.ddaf060_amount_06
+,criss_integrated.ddaf060_postdate_07
+,criss_integrated.ddaf060_desc_07
+,criss_integrated.ddaf060_amount_07
+,criss_integrated.ddaf060_postdate_08
+,criss_integrated.ddaf060_desc_08
+,criss_integrated.ddaf060_amount_08
+,criss_integrated.ddaf060_postdate_09
+,criss_integrated.ddaf060_desc_09
+,criss_integrated.ddaf060_amount_09
+,criss_integrated.ddaf060_postdate_10
+,criss_integrated.ddaf060_desc_10
+,criss_integrated.ddaf060_amount_10
+,criss_integrated.ddaf060_postdate_11
+,criss_integrated.ddaf060_desc_11
+,criss_integrated.ddaf060_amount_11
+,criss_integrated.ddaf060_postdate_12
+,criss_integrated.ddaf060_desc_12
+,criss_integrated.ddaf060_amount_12
+,criss_integrated.ddaf060_postdate_13
+,criss_integrated.ddaf060_desc_13
+,criss_integrated.ddaf060_amount_13
+,criss_integrated.ddaf060_postdate_14
+,criss_integrated.ddaf060_desc_14
+,criss_integrated.ddaf060_amount_14
+,criss_integrated.ddaf060_postdate_15
+,criss_integrated.ddaf060_desc_15
+,criss_integrated.ddaf060_amount_15
+,criss_integrated.ddaf060_refundamt
+,criss_integrated.ddaf060_refundcls
+,criss_integrated.ddaf099_attn
+,criss_integrated.ddaf099_address1
+,criss_integrated.ddaf099_address2
+,criss_integrated.ddaf099_address3
+,criss_integrated.ddaf099_address4
+,criss_integrated.ddaf099_city
+,criss_integrated.ddaf099_state
+,criss_integrated.ddaf099_zipcode
+,criss_integrated.address_change_flag
+
+,criss_integrated.timestamp
+,criss_integrated.hr_empl_name
+,criss_integrated.hr_empl_SSN
+,criss_integrated.hr_empl_jobtitle
+,criss_integrated.hr_empl_jobcode
+,criss_integrated.hr_empl_dept_name
+,criss_integrated.hr_empl_orig_hire_dt
+,criss_integrated.hr_empl_rehire_dt
+,criss_integrated.hr_empl_termination_dt
+,criss_integrated.hr_empl_last_dt_worked
+,criss_integrated.hr_empl_leave_status
+,criss_integrated.hr_empl_job_status
+,criss_integrated.hr_empl_pid
+,criss_integrated.brn_branch_name
+,criss_integrated.brn_br_addr1
+,criss_integrated.brn_br_addr2
+,criss_integrated.brn_br_city
+,criss_integrated.brn_br_state
+,criss_integrated.brn_br_zip
+,criss_integrated.brn_open_date
+,criss_integrated.brn_date_closing
+,criss_integrated.brn_mkt_desc
+,criss_integrated.brn_br_county
+,criss_integrated.brn_branch_type
+,criss_integrated.brn_open_time_oc1
+,criss_integrated.brn_close_time_oc1
+,criss_integrated.brn_open_time_oc2
+,criss_integrated.brn_close_time_oc2
+,criss_integrated.brn_open_time_oc3
+,criss_integrated.brn_close_time_oc3
+,criss_integrated.brn_open_time_oc4
+,criss_integrated.brn_close_time_oc4
+,criss_integrated.brn_open_time_oc5
+,criss_integrated.brn_close_time_oc5
+,criss_integrated.brn_open_time_oc6
+,criss_integrated.brn_close_time_oc6
+,criss_integrated.brn_open_time_oc7
+,criss_integrated.brn_close_time_oc7
+,criss_integrated.act2_type
+,criss_integrated.act2_legal_title_line_1
+,criss_integrated.act2_social_security_num
+,criss_integrated.act2_account_status
+,criss_integrated.act2_account_bank_number
+,criss_integrated.act2_account_branch
+,criss_integrated.act2_product_type
+,criss_integrated.act2_account_open_date
+,criss_integrated.act2_account_close_date
+,criss_integrated.act2_account_maint_date
+,criss_integrated.ztag_acct_rel
+,criss_integrated.ztag__rel
+,criss_integrated.ztag__name
+,criss_integrated.ztag__first_name
+,criss_integrated.ztag__last_name
+,criss_integrated.ztag__name_ext
+,criss_integrated.ztag__addr_line_0
+,criss_integrated.ztag__addr_line_1
+,criss_integrated.ztag__addr_line_2
+,criss_integrated.ztag__addr_line_3
+,criss_integrated.ztag__addr_line_4
+,criss_integrated.ztag__city
+,criss_integrated.ztag__st
+,criss_integrated.ztag__zip15
+,criss_integrated.ztag__zip69
+,criss_integrated.ztag__ssn
+,criss_integrated.ztag__cust_type
+,criss_integrated.ztag__deceased_ind
+,criss_integrated.ztag__country_code
+,criss_integrated.ztag__dob
+,criss_integrated.ztag__cif_key
+,criss_integrated.mem_cust_age
+,criss_integrated.MST_EXT_AVG_LEDGR_BAL_YTD
+,criss_integrated.MST_EXT_ACT_STATUS
+,criss_integrated.MST_EXT_DATE_OD
+,criss_integrated.MST_EXT_DECEASED_DATE
+,criss_integrated.MST_EXT_NO_TIMES_OD_12
+,criss_integrated.MST_EXT_STMT_MAIL_CODE
+,criss_integrated.MST_EXT_DATE_DORMANT
+,criss_integrated.X_VK_CUSTOMER_ID
+,criss_integrated.X_VK_CERTIFICATE_NUMBER_1
+,criss_integrated.X_VK_CERTIFICATE_NUMBER_2
+,criss_integrated.X_VK_CO_ID
+,criss_integrated.XV_BRANCH_NO
+,criss_integrated.XV_PRDCT_CODE
+,criss_integrated.XV_SUB_PRDCT_CODE
+,criss_integrated.XV_ACT_STATUS
+,criss_integrated.XV_DATE_OPENED
+,criss_integrated.XV_BAL_BEFORE_CLOSING
+,criss_integrated.XV_DATE_CLOSED
+,criss_integrated.XV_DATE_DORMANT
+,criss_integrated.XV_STMT_MAIL_CODE
+,criss_integrated.XV_SORT_NAME
+,criss_integrated.XV_BIRTH_DATE
+,criss_integrated.XV_DECEASED_DATE
+,criss_integrated.XV_CURRENT_MATURITY_DATE
+,criss_integrated.XV_CURR_BAL
+,criss_integrated.XV_COST_CENTER
+,criss_integrated.XV_DATE_LAST_MAINT
+,criss_integrated.XV_DATE_LAST_WD
+,criss_integrated.XV_AMT_LAST_WD
+,criss_integrated.XV_BAL_LAST_STMT
+,criss_integrated.XV_DATE_LAST_STMT
+,criss_integrated.mem_cust_empl_ssn
+,criss_integrated.mem_empl_status
+,criss_integrated.mem_cust_empl_job_title
+,criss_integrated.mem_cust_empl_job_code
+,criss_integrated.mem_cust_empl_dept_name
+,criss_integrated.acct_empl_rehire_dt
+,criss_integrated.mem_is_emp_related
+,criss_integrated.mem_is_empl_related_mct_account_no
+,criss_integrated.mem_is_empl_related_toacct
+,criss_integrated.mem_is_empl_related_toacct1
+,criss_integrated.mem_is_empl_related_toacct2
+,criss_integrated.mem_is_empl_related_xfer_acct
+
+,from_unixtime(unix_timestamp()) as hdfs_load_ts
+,${load_date} as load_date     
+
+from
+ (select criss_integrated1.*, 
+	row_number() over( partition by criss_integrated1.mct_reference_no order by (cast(ztag__rel as string)) ) as RIND 
+  from 
+  (
+	select distinct
+	criss_integrated.mct_problem_date
+	,criss_integrated.mct_problem_time
+	,criss_integrated.mct_reference_no
+	,criss_integrated.mct_bank_number
+	,criss_integrated.mct_account_type
+	,criss_integrated.mct_account_no
+	,criss_integrated.mct_customer_id
+	,criss_integrated.mct_reference_9
+	,criss_integrated.mct_cust_svc_rep
+	,criss_integrated.mct_csr_cc
+	,criss_integrated.mct_customer_name
+	,criss_integrated.mct_customer_type
+	,criss_integrated.mct_ssn_tin
+	,criss_integrated.mct_addr_line_1
+	,criss_integrated.mct_addr_line_2
+	,criss_integrated.mct_addr_line_3
+	,criss_integrated.mct_addr_line_4
+	,criss_integrated.mct_addr_line_5
+	,criss_integrated.mct_city
+	,criss_integrated.mct_state
+	,criss_integrated.mct_zip
+	,criss_integrated.mct_status
+	,criss_integrated.mct_input_mode
+	,criss_integrated.mct_product_group
+	,criss_integrated.mct_product_detail
+	,criss_integrated.mct_reason_group
+	,criss_integrated.mct_reason_detail
+	,criss_integrated.mct_amount
+	,criss_integrated.mct_dr_cr_ind
+	,criss_integrated.mct_branch_number
+	,criss_integrated.mct_contact_date
+	,criss_integrated.mct_contact_time
+	,criss_integrated.mct_resolution
+	,criss_integrated.mct_root_cause
+	,criss_integrated.mct_resolved_date
+	,criss_integrated.mct_resolved_time
+	,criss_integrated.mct_refund_action
+	,criss_integrated.mct_resolved_by
+	,criss_integrated.mct_sec_rsch_assigned
+	,criss_integrated.mct_contact_interface
+	,criss_integrated.mct_settlement_bank
+	,criss_integrated.mct_settlement_branch
+	,criss_integrated.mct_tda_acct_no
+	,criss_integrated.mct_request_no
+	,criss_integrated.mct_source_system
+	,criss_integrated.reference_number
+	,criss_integrated.cdaf074_clsreby
+	,criss_integrated.cdaf074_rname
+	,criss_integrated.cdaf074_name_1
+	,criss_integrated.cdaf074_name_2
+	,criss_integrated.cdaf074_name_3
+	,criss_integrated.cdaf074_addr_1
+	,criss_integrated.cdaf074_addr_2
+	,criss_integrated.cdaf074_city
+	,criss_integrated.cdaf074_state
+	,criss_integrated.cdaf074_zip5
+	,criss_integrated.cdaf074_pymt_mth
+	,criss_integrated.cdaf074_pymt_dsc
+	,criss_integrated.cdaf074_xfr_acct
+	,criss_integrated.cdaf074_xfr_type
+	,criss_integrated.cdaf074_xfr_mkt
+	,criss_integrated.cdaf074_lgltitl1
+	,criss_integrated.cdaf074_lgltitl2
+	,criss_integrated.cdaf074_errmsg_l
+	,criss_integrated.cdaf075_totwd5
+	,criss_integrated.cdaf075_totaia5
+	,criss_integrated.cdaf075_totpen5
+	,criss_integrated.cdaf075_totclwd5
+	,criss_integrated.cdaf075_wd5_01
+	,criss_integrated.cdaf075_accrint5
+	,criss_integrated.cdaf075_pen5
+	,criss_integrated.cdaf075_wvereas5_01
+	,criss_integrated.cdaf075_wvereas5_02
+	,criss_integrated.cdaf075_wvereas5_03
+	,criss_integrated.cdaf076_wvereas6_01
+	,criss_integrated.cdaf076_wvereas6_02
+	,criss_integrated.cdaf076_wvereas6_03
+	,criss_integrated.cdaf077_wvereas7_01
+	,criss_integrated.cdaf077_wvereas7_02
+	,criss_integrated.cdaf077_wvereas7_03
+	,criss_integrated.reaf074_clsrby
+	,criss_integrated.reaf074_rname
+	,criss_integrated.reaf074_name_1
+	,criss_integrated.reaf074_name_2
+	,criss_integrated.reaf074_name_3
+	,criss_integrated.reaf074_addr_1
+	,criss_integrated.reaf074_addr_2
+	,criss_integrated.reaf074_city
+	,criss_integrated.reaf074_state
+	,criss_integrated.reaf074_zip5
+	,criss_integrated.reaf074_pymt_mth
+	,criss_integrated.reaf074_pymt_dsc
+	,criss_integrated.reaf074_xfr_acct
+	,criss_integrated.reaf074_xfr_type
+	,criss_integrated.reaf074_xfr_mkt
+	,criss_integrated.reaf075_totwd5
+	,criss_integrated.reaf075_totaia5
+	,criss_integrated.reaf075_totpen5
+	,criss_integrated.reaf075_totclwd5
+	,criss_integrated.reaf075_acct5
+	,criss_integrated.reaf075_prd5
+	,criss_integrated.reaf075_matdt5
+	,criss_integrated.reaf075_wd5
+	,criss_integrated.reaf075_accrint5
+	,criss_integrated.reaf075_pen5
+	,criss_integrated.reaf075_wvereas5
+	,criss_integrated.reaf075_clwd5
+	,criss_integrated.reaf075_wd5_01
+	,criss_integrated.reaf075_wd5_02
+	,criss_integrated.reaf075_wd5_03
+	,criss_integrated.reaf075_wd5_031
+	,criss_integrated.reaf076_wd6_01
+	,criss_integrated.reaf076_wd6_02
+	,criss_integrated.reaf076_wd6_03
+	,criss_integrated.reaf076_wvereas6_01
+	,criss_integrated.reaf076_wvereas6_02
+	,criss_integrated.reaf076_wvereas6_03
+	,criss_integrated.reaf077_wd7_01
+	,criss_integrated.reaf077_wd7_02
+	,criss_integrated.reaf077_wd7_03
+	,criss_integrated.reaf077_wvereas7_01
+	,criss_integrated.reaf077_wvereas7_02
+	,criss_integrated.reaf077_wvereas7_03
+	,criss_integrated.ddaf151_acctdbtd
+	,criss_integrated.ddaf151_amount
+	,criss_integrated.ddaf151_paybleto
+	,criss_integrated.ddaf151_mailto1
+	,criss_integrated.ddaf151_mailto2
+	,criss_integrated.ddaf151_mailto3
+	,criss_integrated.cdaf083_pymtmthd
+	,criss_integrated.cdaf083_term
+	,criss_integrated.accf004_date
+	,criss_integrated.accf004_time
+	,criss_integrated.ddaf054_name_1
+	,criss_integrated.ddaf054_name_2
+	,criss_integrated.ddaf054_name_3
+	,criss_integrated.ddaf054_addr_1
+	,criss_integrated.ddaf054_addr_2
+	,criss_integrated.ddaf054_city
+	,criss_integrated.ddaf054_state
+	,criss_integrated.ddaf054_zip5
+	,criss_integrated.ddaf054_pymt_mth
+	,criss_integrated.ddaf054_pymt_dsc
+	,criss_integrated.ddaf054_xfr_acct
+	,criss_integrated.ddaf054_xfr_type
+	,criss_integrated.ddaf054_xfr_mkt
+	,criss_integrated.ddaf054_rname
+	,criss_integrated.ddaf055_acct
+	,criss_integrated.ddaf055_ledgbal
+	,criss_integrated.ddaf055_closebal
+	,criss_integrated.cdaf058_opendt
+	,criss_integrated.cdaf058_openamt
+	,criss_integrated.cdaf058_acctnum
+	,criss_integrated.cdaf061_acctnbr
+	,criss_integrated.cdaf061_dtewdcl
+	,criss_integrated.cdaf061_trans
+	,criss_integrated.cdaf061_trandes
+	,criss_integrated.cdaf061_amtwdcl
+	,criss_integrated.cdaf061_pnltyamt
+	,criss_integrated.cdaf061_withhld
+	,criss_integrated.cdaf061_irafee
+	,criss_integrated.cdaf071_acctnbr
+	,criss_integrated.cdaf071_dtewdcl
+	,criss_integrated.cdaf071_amtwdcl
+	,criss_integrated.cdaf071_pnltyamt
+	,criss_integrated.ddaf074_discnt
+	,criss_integrated.ddaf074_custid
+	,criss_integrated.ddaf074_fracct
+	,criss_integrated.ddaf074_frtype
+	,criss_integrated.ddaf074_frmkt
+	,criss_integrated.ddaf074_frname
+	,criss_integrated.ddaf074_toacct
+	,criss_integrated.ddaf074_totype
+	,criss_integrated.ddaf074_tomkt
+	,criss_integrated.ddaf074_toname
+	,criss_integrated.ddaf074_amount
+	,criss_integrated.ddaf074_frequncy
+	,criss_integrated.ddaf074_frqdes
+	,criss_integrated.ddaf074_strtdte
+	,criss_integrated.ddaf074_enddate
+	,criss_integrated.ddaf071_custid
+	,criss_integrated.ddaf071_fracct
+	,criss_integrated.ddaf071_frtype
+	,criss_integrated.ddaf071_frmkt
+	,criss_integrated.ddaf071_frname
+	,criss_integrated.ddaf071_toacct
+	,criss_integrated.ddaf071_totype
+	,criss_integrated.ddaf071_tomkt
+	,criss_integrated.ddaf071_toname
+	,criss_integrated.ddaf071_amount
+	,criss_integrated.ddaf071_frequncy
+	,criss_integrated.ddaf071_frqdes
+	,criss_integrated.ddaf071_strtdte
+	,criss_integrated.ddaf071_enddate
+	,criss_integrated.ddaf073_nxttrf
+	,criss_integrated.ddaf073_permnt
+	,criss_integrated.ddaf073_custid
+	,criss_integrated.ddaf073_skptrf
+	,criss_integrated.ddaf073_frbank1
+	,criss_integrated.ddaf073_frtyp1
+	,criss_integrated.ddaf073_frnbr1
+	,criss_integrated.ddaf073_frnme1
+	,criss_integrated.ddaf073_tobank1
+	,criss_integrated.ddaf073_totyp1
+	,criss_integrated.ddaf073_toacct1
+	,criss_integrated.ddaf073_tonme1
+	,criss_integrated.ddaf073_amnt1
+	,criss_integrated.ddaf073_freq1
+	,criss_integrated.ddaf073_frqdes1
+	,criss_integrated.ddaf073_stdte1
+	,criss_integrated.ddaf073_enddte1
+	,criss_integrated.ddaf073_nxttrf1
+	,criss_integrated.ddaf073_frbank2
+	,criss_integrated.ddaf073_frtyp2
+	,criss_integrated.ddaf073_fracct2
+	,criss_integrated.ddaf073_frnme2
+	,criss_integrated.ddaf073_tobank2
+	,criss_integrated.ddaf073_totype2
+	,criss_integrated.ddaf073_toacct2
+	,criss_integrated.ddaf073_tonme2
+	,criss_integrated.ddaf073_amnt2
+	,criss_integrated.ddaf073_freq2
+	,criss_integrated.ddaf073_frqdes2
+	,criss_integrated.ddaf073_stdte2
+	,criss_integrated.ddaf073_enddte2
+	,criss_integrated.ddaf073_nxttrf2
+	,criss_integrated.ddaf076_fracct
+	,criss_integrated.ddaf076_frtype
+	,criss_integrated.ddaf076_frmkt
+	,criss_integrated.ddaf076_frname
+	,criss_integrated.ddaf076_toacct
+	,criss_integrated.ddaf076_totype
+	,criss_integrated.ddaf076_tomkt
+	,criss_integrated.ddaf076_toname
+	,criss_integrated.ddaf076_amount
+	,criss_integrated.ddaf076_frequncy
+	,criss_integrated.ddaf076_frqdes
+	,criss_integrated.ddaf076_enddate
+	,criss_integrated.ddaf072_custid
+	,criss_integrated.ddaf072_fracct
+	,criss_integrated.ddaf072_frtype
+	,criss_integrated.ddaf072_frmkt
+	,criss_integrated.ddaf072_frname
+	,criss_integrated.ddaf072_toacct
+	,criss_integrated.ddaf072_totype
+	,criss_integrated.ddaf072_tomkt
+	,criss_integrated.ddaf072_toname
+	,criss_integrated.ddaf072_amount
+	,criss_integrated.ddaf072_frequncy
+	,criss_integrated.ddaf072_frqdes
+	,criss_integrated.ddaf072_strtdte
+	,criss_integrated.ddaf072_enddate
+	,criss_integrated.ddaf077_nxttrf
+	,criss_integrated.ddaf077_permnt
+	,criss_integrated.ddaf077_custid
+	,criss_integrated.ddaf077_skptrf
+	,criss_integrated.ddaf077_frbank1
+	,criss_integrated.ddaf077_frtyp1
+	,criss_integrated.ddaf077_frnbr1
+	,criss_integrated.ddaf077_frnme1
+	,criss_integrated.ddaf077_tobank1
+	,criss_integrated.ddaf077_totyp1
+	,criss_integrated.ddaf077_toacct1
+	,criss_integrated.ddaf077_tonme1
+	,criss_integrated.ddaf077_amnt1
+	,criss_integrated.ddaf077_freq1
+	,criss_integrated.ddaf077_frqdes1
+	,criss_integrated.ddaf077_stdte1
+	,criss_integrated.ddaf077_enddte1
+	,criss_integrated.ddaf077_nxttrf1
+	,criss_integrated.ddaf077_frbank2
+	,criss_integrated.ddaf077_frtyp2
+	,criss_integrated.ddaf077_fracct2
+	,criss_integrated.ddaf077_frnme2
+	,criss_integrated.ddaf077_tobank2
+	,criss_integrated.ddaf077_totype2
+	,criss_integrated.ddaf077_toacct2
+	,criss_integrated.ddaf077_tonme2
+	,criss_integrated.ddaf077_amnt2
+	,criss_integrated.ddaf077_freq2
+	,criss_integrated.ddaf077_frqdes2
+	,criss_integrated.ddaf077_stdte2
+	,criss_integrated.ddaf077_enddte2
+	,criss_integrated.ddaf077_nxttrf2
+	,criss_integrated.fxrf001_trftype
+	,criss_integrated.fxrf001_trfamt
+	,criss_integrated.fxrf001_chrgefee
+	,criss_integrated.fxrf001_fracctnb
+	,criss_integrated.fxrf001_frbnkid
+	,criss_integrated.fxrf001_frendbal
+	,criss_integrated.fxrf001_toacctnb
+	,criss_integrated.fxrf001_tobnkid
+	,criss_integrated.fxrf001_toendbal
+	,criss_integrated.ddaf122_custname
+	,criss_integrated.ddaf122_custnme2
+	,criss_integrated.ddaf122_acctnbr
+	,criss_integrated.ddaf122_nbrchcks
+	,criss_integrated.ddaf122_feechrgd
+	,criss_integrated.ddaf122_feeamt
+	,criss_integrated.ddaf122_waiveapp
+	,criss_integrated.clcf093_custname
+	,criss_integrated.clcf093_acctnbr
+	,criss_integrated.clcf093_typofchk
+	,criss_integrated.clcf093_nbrofchk
+	,criss_integrated.clcf093_chknbr1
+	,criss_integrated.clcf093_chkamt1
+	,criss_integrated.clcf093_payee1
+	,criss_integrated.clcf093_chknbr2
+	,criss_integrated.clcf093_chkamt2
+	,criss_integrated.clcf093_payee2
+	,criss_integrated.clcf093_chknbr3
+	,criss_integrated.clcf093_chkamt3
+	,criss_integrated.clcf093_payee3
+	,criss_integrated.ciff035_chgmira
+	,criss_integrated.ciff035_acctsel
+	,criss_integrated.ciff035_foreign
+	,criss_integrated.ciff035_oldadr1
+	,criss_integrated.ciff035_oldadr2
+	,criss_integrated.ciff035_oldadr3
+	,criss_integrated.ciff035_oldadr4
+	,criss_integrated.ciff035_oldcity
+	,criss_integrated.ciff035_oldst
+	,criss_integrated.ciff035_oldzip1
+	,criss_integrated.ciff035_oldhph
+	,criss_integrated.ciff035_oldunlst
+	,criss_integrated.ciff035_oldbph
+	,criss_integrated.ciff035_olddob
+	,criss_integrated.ciff035_oldemplr
+	,criss_integrated.ciff035_oldoccup
+	,criss_integrated.ciff035_newadr1
+	,criss_integrated.ciff035_newadr2
+	,criss_integrated.ciff035_newadr3
+	,criss_integrated.ciff035_newadr4
+	,criss_integrated.ciff035_newcity
+	,criss_integrated.ciff035_newst
+	,criss_integrated.ciff035_newzip1
+	,criss_integrated.ciff035_newhph1
+	,criss_integrated.ciff035_newhph2
+	,criss_integrated.ciff035_newhph3
+	,criss_integrated.ciff035_newunls
+	,criss_integrated.ciff035_newbph1
+	,criss_integrated.ciff035_newbph2
+	,criss_integrated.ciff035_newbph3
+	,criss_integrated.ciff035_newdob
+	,criss_integrated.ciff035_newemplr
+	,criss_integrated.ciff035_newocc
+	,criss_integrated.ciffb35_relcust
+	,criss_integrated.ciffb35_rel1
+	,criss_integrated.ciffb35_name1
+	,criss_integrated.ciffb35_addr1
+	,criss_integrated.csvf006_old_email_1a
+	,criss_integrated.csvf006_old_email_1b
+	,criss_integrated.csvf006_old_email_2a
+	,criss_integrated.csvf006_old_email_2b
+	,criss_integrated.csvf006_new_email_1a
+	,criss_integrated.csvf006_new_email_1b
+	,criss_integrated.csvf006_new_email_2a
+	,criss_integrated.csvf006_new_email_2b
+	,criss_integrated.ciff044_oldhph
+	,criss_integrated.ciff044_oldunlst
+	,criss_integrated.ciff044_oldbph
+	,criss_integrated.ciff044_olddob
+	,criss_integrated.ciff044_oldemplr
+	,criss_integrated.ciff044_oldoccup
+	,criss_integrated.ciff044_newhph1
+	,criss_integrated.ciff044_newhph2
+	,criss_integrated.ciff044_newhph3
+	,criss_integrated.ciff044_newunls
+	,criss_integrated.ciff044_newbph1
+	,criss_integrated.ciff044_newbph2
+	,criss_integrated.ciff044_newbph3
+	,criss_integrated.ciff044_newdob
+	,criss_integrated.ciff044_newemplr
+	,criss_integrated.ciff044_newocc
+	,criss_integrated.csvf015_lbank_01
+	,criss_integrated.csvf015_ltype_01
+	,criss_integrated.csvf015_lacct_01
+	,criss_integrated.csvf015_rbank_01
+	,criss_integrated.csvf015_rtype_01
+	,criss_integrated.csvf015_racct_01
+	,criss_integrated.csvf015_lbank_02
+	,criss_integrated.csvf015_ltype_02
+	,criss_integrated.csvf015_lacct_02
+	,criss_integrated.csvf015_rbank_02
+	,criss_integrated.csvf015_rtype_02
+	,criss_integrated.csvf015_racct_02
+	,criss_integrated.csvf015_lbank_03
+	,criss_integrated.csvf015_ltype_03
+	,criss_integrated.csvf015_lacct_03
+	,criss_integrated.csvf015_rbank_03
+	,criss_integrated.csvf015_rtype_03
+	,criss_integrated.csvf015_racct_03
+	,criss_integrated.csvf015_lbank_04
+	,criss_integrated.csvf015_ltype_04
+	,criss_integrated.csvf015_lacct_04
+	,criss_integrated.csvf015_rbank_04
+	,criss_integrated.csvf015_rtype_04
+	,criss_integrated.csvf015_racct_04
+	,criss_integrated.csvf015_lbank_05
+	,criss_integrated.csvf015_ltype_05
+	,criss_integrated.csvf015_lacct_05
+	,criss_integrated.csvf015_rbank_05
+	,criss_integrated.csvf015_rtype_05
+	,criss_integrated.csvf015_racct_05
+	,criss_integrated.csvf015_lbank_06
+	,criss_integrated.csvf015_ltype_06
+	,criss_integrated.csvf015_lacct_06
+	,criss_integrated.csvf015_rbank_06
+	,criss_integrated.csvf015_rtype_06
+	,criss_integrated.csvf015_racct_06
+	,criss_integrated.csvf015_lbank_07
+	,criss_integrated.csvf015_ltype_07
+	,criss_integrated.csvf015_lacct_07
+	,criss_integrated.csvf015_rbank_07
+	,criss_integrated.csvf015_rtype_07
+	,criss_integrated.csvf015_racct_07
+	,criss_integrated.csvf015_lbank_08
+	,criss_integrated.csvf015_ltype_08
+	,criss_integrated.csvf015_lacct_08
+	,criss_integrated.csvf015_rbank_08
+	,criss_integrated.csvf015_rtype_08
+	,criss_integrated.csvf015_racct_08
+	,criss_integrated.csvf015_lbank_09
+	,criss_integrated.csvf015_ltype_09
+	,criss_integrated.csvf015_lacct_09
+	,criss_integrated.csvf015_rbank_09
+	,criss_integrated.csvf015_rtype_09
+	,criss_integrated.csvf015_racct_09
+	,criss_integrated.csvf015_lbank_10
+	,criss_integrated.csvf015_ltype_10
+	,criss_integrated.csvf015_lacct_10
+	,criss_integrated.csvf015_rbank_10
+	,criss_integrated.csvf015_rtype_10
+	,criss_integrated.csvf015_racct_10
+	,criss_integrated.csvf015_lbank_11
+	,criss_integrated.csvf015_ltype_11
+	,criss_integrated.csvf015_lacct_11
+	,criss_integrated.csvf015_rbank_11
+	,criss_integrated.csvf015_rtype_11
+	,criss_integrated.csvf015_racct_11
+	,criss_integrated.csvf015_lbank_12
+	,criss_integrated.csvf015_ltype_12
+	,criss_integrated.csvf015_lacct_12
+	,criss_integrated.csvf015_rbank_12
+	,criss_integrated.csvf015_rtype_12
+	,criss_integrated.csvf015_racct_12
+	,criss_integrated.csvf015_subtitle
+	,criss_integrated.csvf016_oldttle1
+	,criss_integrated.csvf016_oldttle2
+	,criss_integrated.csvf016_oldttle3
+	,criss_integrated.csvf016_oldttle4
+	,criss_integrated.csvf016_oldttle5
+	,criss_integrated.csvf016_oldttle6
+	,criss_integrated.csvf016_newttle1
+	,criss_integrated.csvf016_newttle2
+	,criss_integrated.csvf016_newttle3
+	,criss_integrated.csvf016_newttle4
+	,criss_integrated.csvf016_newttle5
+	,criss_integrated.csvf016_newttle6
+	,criss_integrated.csvf016_ownertyp
+	,criss_integrated.csvf014_add
+	,criss_integrated.csvf014_change
+	,criss_integrated.csvf014_delete
+	,criss_integrated.csvf014_subtitle
+	,criss_integrated.csvf014_lbank
+	,criss_integrated.csvf014_ltype
+	,criss_integrated.csvf014_lacct
+	,criss_integrated.csvf014_rbank
+	,criss_integrated.csvf014_rtype
+	,criss_integrated.csvf014_racct
+	,criss_integrated.csvf013_currnme
+	,criss_integrated.csvf013_corrname
+	,criss_integrated.csvf013_lbank
+	,criss_integrated.csvf013_ltype
+	,criss_integrated.csvf013_lacct
+	,criss_integrated.csvf013_rbank
+	,criss_integrated.csvf013_rtype
+	,criss_integrated.csvf013_racct
+	,criss_integrated.csvf088_newatt
+	,criss_integrated.csvf088_newadr1
+	,criss_integrated.csvf088_newadr2
+	,criss_integrated.csvf088_newcity
+	,criss_integrated.csvf088_newst
+	,criss_integrated.csvf088_newzip1
+	,criss_integrated.csvf088_newdph1
+	,criss_integrated.csvf088_newdph2
+	,criss_integrated.csvf088_newdph3
+	,criss_integrated.csvf088_newdext
+	,criss_integrated.csvf088_neweph1
+	,criss_integrated.csvf088_neweph2
+	,criss_integrated.csvf088_neweph3
+	,criss_integrated.csvf088_newmail
+	,criss_integrated.csvfa88_lmail_01
+	,criss_integrated.csvfa88_lbank_01
+	,criss_integrated.csvfa88_ltype_01
+	,criss_integrated.csvfa88_lacct_01
+	,criss_integrated.csvfa88_lemail_01
+	,criss_integrated.csvfa88_rmail_01
+	,criss_integrated.csvfa88_rbank_01
+	,criss_integrated.csvfa88_rtype_01
+	,criss_integrated.csvfa88_racct_01
+	,criss_integrated.csvfa88_remail_01
+	,criss_integrated.csvfa88_lmail_02
+	,criss_integrated.csvfa88_lbank_02
+	,criss_integrated.csvfa88_ltype_02
+	,criss_integrated.csvfa88_lacct_02
+	,criss_integrated.csvfa88_lemail_02
+	,criss_integrated.csvfa88_rmail_02
+	,criss_integrated.csvfa88_rbank_02
+	,criss_integrated.csvfa88_rtype_02
+	,criss_integrated.csvfa88_racct_02
+	,criss_integrated.csvfa88_remail_02
+	,criss_integrated.csvfa88_lmail_03
+	,criss_integrated.csvfa88_lbank_03
+	,criss_integrated.csvfa88_ltype_03
+	,criss_integrated.csvfa88_lacct_03
+	,criss_integrated.csvfa88_lemail_03
+	,criss_integrated.csvfa88_rmail_03
+	,criss_integrated.csvfa88_rbank_03
+	,criss_integrated.csvfa88_rtype_03
+	,criss_integrated.csvfa88_racct_03
+	,criss_integrated.csvfa88_remail_03
+	,criss_integrated.csvfa88_lmail_04
+	,criss_integrated.csvfa88_lbank_04
+	,criss_integrated.csvfa88_ltype_04
+	,criss_integrated.csvfa88_lacct_04
+	,criss_integrated.csvfa88_lemail_04
+	,criss_integrated.csvfa88_rmail_04
+	,criss_integrated.csvfa88_rbank_04
+	,criss_integrated.csvfa88_rtype_04
+	,criss_integrated.csvfa88_racct_04
+	,criss_integrated.csvfa88_remail_04
+	,criss_integrated.csvfa88_lmail_05
+	,criss_integrated.csvfa88_lbank_05
+	,criss_integrated.csvfa88_ltype_05
+	,criss_integrated.csvfa88_lacct_05
+	,criss_integrated.csvfa88_lemail_05
+	,criss_integrated.csvfa88_rmail_05
+	,criss_integrated.csvfa88_rbank_05
+	,criss_integrated.csvfa88_rtype_05
+	,criss_integrated.csvfa88_racct_05
+	,criss_integrated.csvfa88_remail_05
+	,criss_integrated.csvfa88_lmail_06
+	,criss_integrated.csvfa88_lbank_06
+	,criss_integrated.csvfa88_ltype_06
+	,criss_integrated.csvfa88_lacct_06
+	,criss_integrated.csvfa88_lemail_06
+	,criss_integrated.csvfa88_rmail_06
+	,criss_integrated.csvfa88_rbank_06
+	,criss_integrated.csvfa88_rtype_06
+	,criss_integrated.csvfa88_racct_06
+	,criss_integrated.csvfa88_remail_06
+	,criss_integrated.csvfa88_lmail_07
+	,criss_integrated.csvfa88_lbank_07
+	,criss_integrated.csvfa88_ltype_07
+	,criss_integrated.csvfa88_lacct_07
+	,criss_integrated.csvfa88_lemail_07
+	,criss_integrated.csvfa88_rmail_07
+	,criss_integrated.csvfa88_rbank_07
+	,criss_integrated.csvfa88_rtype_07
+	,criss_integrated.csvfa88_racct_07
+	,criss_integrated.csvfa88_remail_07
+	,criss_integrated.csvfa88_lmail_08
+	,criss_integrated.csvfa88_lbank_08
+	,criss_integrated.csvfa88_ltype_08
+	,criss_integrated.csvfa88_lacct_08
+	,criss_integrated.csvfa88_lemail_08
+	,criss_integrated.csvfa88_rmail_08
+	,criss_integrated.csvfa88_rbank_08
+	,criss_integrated.csvfa88_rtype_08
+	,criss_integrated.csvfa88_racct_08
+	,criss_integrated.csvfa88_remail_08
+	,criss_integrated.csvfa88_lmail_09
+	,criss_integrated.csvfa88_lbank_09
+	,criss_integrated.csvfa88_ltype_09
+	,criss_integrated.csvfa88_lacct_09
+	,criss_integrated.csvfa88_lemail_09
+	,criss_integrated.csvfa88_rmail_09
+	,criss_integrated.csvfa88_rbank_09
+	,criss_integrated.csvfa88_rtype_09
+	,criss_integrated.csvfa88_racct_09
+	,criss_integrated.csvfa88_remail_09
+	,criss_integrated.csvfa88_lmail_10
+	,criss_integrated.csvfa88_lbank_10
+	,criss_integrated.csvfa88_ltype_10
+	,criss_integrated.csvfa88_lacct_10
+	,criss_integrated.csvfa88_lemail_10
+	,criss_integrated.csvfa88_rmail_10
+	,criss_integrated.csvfa88_rbank_10
+	,criss_integrated.csvfa88_rtype_10
+	,criss_integrated.csvfa88_racct_10
+	,criss_integrated.csvfa88_remail_10
+	,criss_integrated.csvfa88_lmail_11
+	,criss_integrated.csvfa88_lbank_11
+	,criss_integrated.csvfa88_ltype_11
+	,criss_integrated.csvfa88_lacct_11
+	,criss_integrated.csvfa88_lemail_11
+	,criss_integrated.csvfa88_rmail_11
+	,criss_integrated.csvfa88_rbank_11
+	,criss_integrated.csvfa88_rtype_11
+	,criss_integrated.csvfa88_racct_11
+	,criss_integrated.csvfa88_remail_11
+	,criss_integrated.csvfa88_lmail_12
+	,criss_integrated.csvfa88_lbank_12
+	,criss_integrated.csvfa88_ltype_12
+	,criss_integrated.csvfa88_lacct_12
+	,criss_integrated.csvfa88_lemail_12
+	,criss_integrated.csvfa88_rmail_12
+	,criss_integrated.csvfa88_rbank_12
+	,criss_integrated.csvfa88_rtype_12
+	,criss_integrated.csvfa88_racct_12
+	,criss_integrated.csvfa88_remail_12
+	,criss_integrated.csvf089_trladr1
+	,criss_integrated.csvf089_trladr2
+	,criss_integrated.csvf089_trlcity
+	,criss_integrated.csvf089_trlst
+	,criss_integrated.csvf089_trlzip1
+	,criss_integrated.csvf089_ovradr1
+	,criss_integrated.csvf089_ovradr2
+	,criss_integrated.csvf089_ovrcity
+	,criss_integrated.csvf089_ovrst
+	,criss_integrated.csvf089_ovrzip1
+	,criss_integrated.csvf020_acctnbr1
+	,criss_integrated.csvf020_acctnbr2
+	,criss_integrated.csvf020_acctnbr3
+	,criss_integrated.csvf020_acctnbr4
+	,criss_integrated.csvf020_acctnbr5
+	,criss_integrated.csvf020_acctnbr6
+	,criss_integrated.csvf020_lglttle1
+	,criss_integrated.csvf020_ssnein1
+	,criss_integrated.csvf020_dob1
+	,criss_integrated.csvf020_lglttle2
+	,criss_integrated.csvf020_ssnein2
+	,criss_integrated.csvf020_dob2
+	,criss_integrated.csvf020_lgltitl3
+	,criss_integrated.csvf020_ssnein3
+	,criss_integrated.csvf020_dob3
+	,criss_integrated.csvf020_lgltitl4
+	,criss_integrated.csvf020_ssnein4
+	,criss_integrated.csvf020_dob4
+	,criss_integrated.csvf020_lgltitl5
+	,criss_integrated.csvf020_ssnein5
+	,criss_integrated.csvf020_dob5
+	,criss_integrated.csvf020_lgltitl6
+	,criss_integrated.csvf020_ssnein6
+	,criss_integrated.csvf020_dob6
+	,criss_integrated.ciffc35_trladr1
+	,criss_integrated.ciffc35_trladr2
+	,criss_integrated.ciffc35_trladr3
+	,criss_integrated.ciffc35_trladr4
+	,criss_integrated.ciffc35_trlcity
+	,criss_integrated.ciffc35_trlst
+	,criss_integrated.ciffc35_trlzip1
+	,criss_integrated.ciffc35_ovradr1
+	,criss_integrated.ciffc35_ovradr2
+	,criss_integrated.ciffc35_ovradr3
+	,criss_integrated.ciffc35_ovradr4
+	,criss_integrated.ciffc35_ovrcity
+	,criss_integrated.ciffc35_ovrst
+	,criss_integrated.ciffc35_ovrzip1
+	,criss_integrated.ddaf007_dbtcard
+	,criss_integrated.ddaf007_exp3day
+	,criss_integrated.ddaf007_exp4day
+	,criss_integrated.ddaf007_exp3dayc
+	,criss_integrated.ddaf007_exp4dayc
+	,criss_integrated.csvf037_addrovrd
+	,criss_integrated.csvf037_custatbr
+	,criss_integrated.csvf037_cardnbr
+	,criss_integrated.csvf037_acctnbr_01
+	,criss_integrated.csvf037_accttyp_01
+	,criss_integrated.csvf037_acctnbr_02
+	,criss_integrated.csvf037_accttyp_02
+	,criss_integrated.csvf037_acctnbr_03
+	,criss_integrated.csvf037_accttyp_03
+	,criss_integrated.csvf037_acctnbr_04
+	,criss_integrated.csvf037_accttyp_04
+	,criss_integrated.csvf037_acctnbr_05
+	,criss_integrated.csvf037_accttyp_05
+	,criss_integrated.csvf037_acctnbr_06
+	,criss_integrated.csvf037_accttyp_06
+	,criss_integrated.csvf037_acctnbr_07
+	,criss_integrated.csvf037_accttyp_07
+	,criss_integrated.csvf037_acctnbr_08
+	,criss_integrated.csvf037_accttyp_08
+	,criss_integrated.csvf037_acctnbr_09
+	,criss_integrated.csvf037_accttyp_09
+	,criss_integrated.csvf037_acctnbr_10
+	,criss_integrated.csvf037_accttyp_10
+	,criss_integrated.csvf037_acctnbr_11
+	,criss_integrated.csvf037_accttyp_11
+	,criss_integrated.csvf037_acctnbr_12
+	,criss_integrated.csvf037_accttyp_12
+	,criss_integrated.csvf038_busname
+	,criss_integrated.csvf038_crdhldnm
+	,criss_integrated.csvf038_authsgnr
+	,criss_integrated.csvf038_address1
+	,criss_integrated.csvf038_address2
+	,criss_integrated.csvf038_address3
+	,criss_integrated.csvf038_address4
+	,criss_integrated.csvf038_city
+	,criss_integrated.csvf038_state
+	,criss_integrated.csvf038_zip
+	,criss_integrated.csvf038_cstgnpin
+	,criss_integrated.csvf038_sysgnpin
+	,criss_integrated.dcaf002_crdhldnm
+	,criss_integrated.dcaf003_crdhldnm
+	,criss_integrated.dcaf003_scurrco
+	,criss_integrated.dcaf003_currntco
+	,criss_integrated.dcaf003_snewcode
+	,criss_integrated.dcaf003_newcode
+	,criss_integrated.dcaf004_crdhldnm
+	,criss_integrated.dcaf004_newname
+	,criss_integrated.dcaf004_newcard
+	,criss_integrated.dcaf005_busname
+	,criss_integrated.dcaf005_crdhlrnm
+	,criss_integrated.dcaf005_newbusnm
+	,criss_integrated.dcaf005_newcrdhl
+	,criss_integrated.dcaf005_newcard
+	,criss_integrated.dcaf006_addrovrd
+	,criss_integrated.dcaf006_cstatbrn
+	,criss_integrated.dcaf006_rtnexcrd
+	,criss_integrated.dcaf006_newcrdnm
+	,criss_integrated.dcaf006_newcrd
+	,criss_integrated.dcaf006_cstslpin
+	,criss_integrated.dcaf006_sysgnpin
+	,criss_integrated.dcaf006_pinmailr
+	,criss_integrated.ddaf060_postdate_01
+	,criss_integrated.ddaf060_desc_01
+	,criss_integrated.ddaf060_amount_01
+	,criss_integrated.ddaf060_postdate_02
+	,criss_integrated.ddaf060_desc_02
+	,criss_integrated.ddaf060_amount_02
+	,criss_integrated.ddaf060_postdate_03
+	,criss_integrated.ddaf060_desc_03
+	,criss_integrated.ddaf060_amount_03
+	,criss_integrated.ddaf060_postdate_04
+	,criss_integrated.ddaf060_desc_04
+	,criss_integrated.ddaf060_amount_04
+	,criss_integrated.ddaf060_postdate_05
+	,criss_integrated.ddaf060_desc_05
+	,criss_integrated.ddaf060_amount_05
+	,criss_integrated.ddaf060_postdate_06
+	,criss_integrated.ddaf060_desc_06
+	,criss_integrated.ddaf060_amount_06
+	,criss_integrated.ddaf060_postdate_07
+	,criss_integrated.ddaf060_desc_07
+	,criss_integrated.ddaf060_amount_07
+	,criss_integrated.ddaf060_postdate_08
+	,criss_integrated.ddaf060_desc_08
+	,criss_integrated.ddaf060_amount_08
+	,criss_integrated.ddaf060_postdate_09
+	,criss_integrated.ddaf060_desc_09
+	,criss_integrated.ddaf060_amount_09
+	,criss_integrated.ddaf060_postdate_10
+	,criss_integrated.ddaf060_desc_10
+	,criss_integrated.ddaf060_amount_10
+	,criss_integrated.ddaf060_postdate_11
+	,criss_integrated.ddaf060_desc_11
+	,criss_integrated.ddaf060_amount_11
+	,criss_integrated.ddaf060_postdate_12
+	,criss_integrated.ddaf060_desc_12
+	,criss_integrated.ddaf060_amount_12
+	,criss_integrated.ddaf060_postdate_13
+	,criss_integrated.ddaf060_desc_13
+	,criss_integrated.ddaf060_amount_13
+	,criss_integrated.ddaf060_postdate_14
+	,criss_integrated.ddaf060_desc_14
+	,criss_integrated.ddaf060_amount_14
+	,criss_integrated.ddaf060_postdate_15
+	,criss_integrated.ddaf060_desc_15
+	,criss_integrated.ddaf060_amount_15
+	,criss_integrated.ddaf060_refundamt
+	,criss_integrated.ddaf060_refundcls
+	,criss_integrated.ddaf099_attn
+	,criss_integrated.ddaf099_address1
+	,criss_integrated.ddaf099_address2
+	,criss_integrated.ddaf099_address3
+	,criss_integrated.ddaf099_address4
+	,criss_integrated.ddaf099_city
+	,criss_integrated.ddaf099_state
+	,criss_integrated.ddaf099_zipcode
+	,criss_integrated.address_change_flag
+	
+	,criss_integrated.timestamp
+	,criss_integrated.hr_empl_name
+	,criss_integrated.hr_empl_SSN
+	,criss_integrated.hr_empl_jobtitle
+	,criss_integrated.hr_empl_jobcode
+	,criss_integrated.hr_empl_dept_name
+	,criss_integrated.hr_empl_orig_hire_dt
+	,criss_integrated.hr_empl_rehire_dt
+	,criss_integrated.hr_empl_termination_dt
+	,criss_integrated.hr_empl_last_dt_worked
+	,criss_integrated.hr_empl_leave_status
+	,criss_integrated.hr_empl_job_status
+	,criss_integrated.hr_empl_pid
+	,criss_integrated.brn_branch_name
+	,criss_integrated.brn_br_addr1
+	,criss_integrated.brn_br_addr2
+	,criss_integrated.brn_br_city
+	,criss_integrated.brn_br_state
+	,criss_integrated.brn_br_zip
+	,criss_integrated.brn_open_date
+	,criss_integrated.brn_date_closing
+	,criss_integrated.brn_mkt_desc
+	,criss_integrated.brn_br_county
+	,criss_integrated.brn_branch_type
+	,criss_integrated.brn_open_time_oc1
+	,criss_integrated.brn_close_time_oc1
+	,criss_integrated.brn_open_time_oc2
+	,criss_integrated.brn_close_time_oc2
+	,criss_integrated.brn_open_time_oc3
+	,criss_integrated.brn_close_time_oc3
+	,criss_integrated.brn_open_time_oc4
+	,criss_integrated.brn_close_time_oc4
+	,criss_integrated.brn_open_time_oc5
+	,criss_integrated.brn_close_time_oc5
+	,criss_integrated.brn_open_time_oc6
+	,criss_integrated.brn_close_time_oc6
+	,criss_integrated.brn_open_time_oc7
+	,criss_integrated.brn_close_time_oc7
+	,criss_integrated.act2_type
+	,criss_integrated.act2_legal_title_line_1
+	,criss_integrated.act2_social_security_num
+	,criss_integrated.act2_account_status
+	,criss_integrated.act2_account_bank_number
+	,criss_integrated.act2_account_branch
+	,criss_integrated.act2_product_type
+	,criss_integrated.act2_account_open_date
+	,criss_integrated.act2_account_close_date
+	,criss_integrated.act2_account_maint_date
+	,criss_integrated.ztag_acct_rel
+
+	,cust2cust.ztag__rel
+	,customer.ztag__name
+	,customer.ztag__first_name
+	,customer.ztag__last_name
+	,customer.ztag__name_ext
+	,customer.ztag__addr_line_0
+	,customer.ztag__addr_line_1
+	,customer.ztag__addr_line_2
+	,customer.ztag__addr_line_3
+	,customer.ztag__addr_line_4
+	,customer.ztag__city
+	,customer.ztag__st
+	,customer.ztag__zip15
+	,customer.ztag__zip69
+	,customer.ztag__ssn
+	,customer.ztag__cust_type
+	,customer.ztag__deceased_ind
+	,customer.ztag__country_code
+	,customer.ztag__dob
+	,customer.ztag__cif_key
+	,cast((datediff(to_date(from_unixtime(unix_timestamp())), to_date(from_unixtime(unix_timestamp(cast(customer.ztag__dob as string), 'yyyyMMdd')))) ) /364 as int) as mem_cust_age
+
+	,master.MST_EXT_AVG_LEDGR_BAL_YTD
+	,master.MST_EXT_ACT_STATUS
+	,master.MST_EXT_DATE_OD
+	,master.MST_EXT_DECEASED_DATE
+	,master.MST_EXT_NO_TIMES_OD_12
+	,master.MST_EXT_STMT_MAIL_CODE
+	,master.MST_EXT_DATE_DORMANT
+
+
+	,extract.X_VK_CUSTOMER_ID
+	,extract.X_VK_CERTIFICATE_NUMBER_1
+	,extract.X_VK_CERTIFICATE_NUMBER_2
+	,extract.X_VK_CO_ID
+	,extract.XV_BRANCH_NO
+	,extract.XV_PRDCT_CODE
+	,extract.XV_SUB_PRDCT_CODE
+	,extract.XV_ACT_STATUS
+	,extract.XV_DATE_OPENED
+	,extract.XV_BAL_BEFORE_CLOSING
+	,extract.XV_DATE_CLOSED
+	,extract.XV_DATE_DORMANT
+	,extract.XV_STMT_MAIL_CODE
+	,extract.XV_SORT_NAME
+	,extract.XV_BIRTH_DATE
+	,extract.XV_DECEASED_DATE
+	,extract.XV_CURRENT_MATURITY_DATE
+	,extract.XV_CURR_BAL
+	,extract.XV_COST_CENTER
+	,extract.XV_DATE_LAST_MAINT
+	,extract.XV_DATE_LAST_WD
+	,extract.XV_AMT_LAST_WD
+	,extract.XV_BAL_LAST_STMT
+	,extract.XV_DATE_LAST_STMT
+
+	,employee.mem_cust_empl_ssn as mem_cust_empl_ssn
+	,employee.mem_empl_status as mem_empl_status
+	,employee.hr_empl_jobtitle as mem_cust_empl_job_title
+	,employee.hr_empl_jobcode as mem_cust_empl_job_code
+	,employee.hr_empl_dept_name as mem_cust_empl_dept_name
+	,employee.acct_empl_rehire_dt as acct_empl_rehire_dt
+
+	,case when employee.c2a_account_number is not null then 'Y' end as mem_is_emp_related
+	,case when employee.c2a_account_number is null then 'N' else 'Y' end as mem_is_empl_related_mct_account_no
+	,case when coalesce (employee1.c2a_account_number, employee2.c2a_account_number, employee3.c2a_account_number, employee4.c2a_account_number, employee41.c2a_account_number) is null then 'N' else 'Y' end as mem_is_empl_related_toacct
+	,case when coalesce(employee5.c2a_account_number, employee6.c2a_account_number) is null then 'N' else 'Y' end as mem_is_empl_related_toacct1
+	,case when coalesce(employee7.c2a_account_number, employee8.c2a_account_number) is null then 'N' else 'Y' end as mem_is_empl_related_toacct2
+	,case when coalesce(employee9.c2a_account_number,employee10.c2a_account_number,employee11.c2a_account_number,employee12.c2a_account_number,employee13.c2a_account_number,employee14.c2a_account_number,employee15.c2a_account_number) is null then 'N' else 'Y' end as mem_is_empl_related_xfer_acct
+
+	from 
+	(	
+		select 
+		criss_integrated1.*
+		,cust2acct.ztag_acct_rel 
+		,cust2acct.ztag_keymaster
+	
+		from
+		(
+			select 
+				criss.*
+				,CONCAT(criss.MCT_PROBLEM_DATE, concat(' '), concat(SUBSTRING(criss.MCT_PROBLEM_TIME,1,2),':',SUBSTRING(criss.MCT_PROBLEM_TIME,4,2), ':',SUBSTRING(criss.MCT_PROBLEM_TIME,7,2)))  as timestamp
+				,hr.hr_empl_name
+				,hr.hr_empl_SSN
+				,hr.hr_empl_jobtitle
+				,hr.hr_empl_jobcode
+				,hr.hr_empl_dept_name
+				,hr.hr_empl_orig_hire_dt
+				,hr.hr_empl_rehire_dt
+				,hr.hr_empl_termination_dt
+				,hr.hr_empl_last_dt_worked
+				,hr.hr_empl_leave_status
+				,hr.hr_empl_job_status
+				,hr.hr_empl_pid
+				
+				,branch.brn_branch_name
+				,branch.brn_br_addr1
+				,branch.brn_br_addr2
+				,branch.brn_br_city
+				,branch.brn_br_state
+				,branch.brn_br_zip
+				,branch.brn_open_date
+				,branch.brn_date_closing
+				,branch.brn_mkt_desc
+				,branch.brn_br_county
+				,branch.brn_branch_type
+				,branch.brn_open_time_oc1
+				,branch.brn_close_time_oc1
+				,branch.brn_open_time_oc2
+				,branch.brn_close_time_oc2
+				,branch.brn_open_time_oc3
+				,branch.brn_close_time_oc3
+				,branch.brn_open_time_oc4
+				,branch.brn_close_time_oc4
+				,branch.brn_open_time_oc5
+				,branch.brn_close_time_oc5
+				,branch.brn_open_time_oc6
+				,branch.brn_close_time_oc6
+				,branch.brn_open_time_oc7
+				,branch.brn_close_time_oc7
+							
+				,account.act2_type
+				,account.act2_legal_title_line_1
+				,account.act2_social_security_num
+				,account.act2_account_status
+				,account.act2_account_bank_number
+				,account.act2_account_branch
+				,account.act2_product_type
+				,account.act2_account_open_date
+				,account.act2_account_close_date
+				,account.act2_account_maint_date
+			
+			from
+			  ${hv_db_efgifi_wrk}.wrk_criss_joined criss
+			left outer join
+			  ${hv_db_efgifi}.HR_PER29901_DAT hr
+			 on criss.MCT_CUST_SVC_REP = hr.hr_empl_pid and criss.load_date = hr.load_date and hr.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+			left outer join
+			  ${hv_db_efgifi}.ticofficial_branch_data branch
+			 on criss.MCT_CSR_CC = concat(branch.brn_bl_mkt_id, branch.brn_bl_branch) and criss.load_date = branch.load_date
+			 and branch.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+			left outer join
+			  ${hv_db_efgifi}.ACCT_TRL_DLY_ACCOUNT3 account
+			 on
+			  criss.MCT_ACCOUNT_NO = account.act2_number and SUBSTR(criss.MCT_ACCOUNT_TYPE,1,2) = SUBSTR(account.act2_type,1,2)
+			   and criss.load_date = account.load_date and account.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+	
+		) criss_integrated1
+	
+		left outer join
+		  (select cust2acct1.*
+	      from (select ztag__acct_rel as ztag_acct_rel,ztag__keymaster as ztag_keymaster,ztag__acct_number,ztag__acct_type,ztag__acct_bank_number,load_date,
+		    ROW_NUMBER() OVER (PARTITION BY ztag__acct_number ORDER BY cast(cust.ztag__acct_rel as string) ) as RIND
+			from ${hv_db_etl}.CIF_PNC_IMS_CUST2ACCT cust where cust.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}) cust2acct1 where cust2acct1.RIND = 1) cust2acct
+		 on
+		  criss_integrated1.MCT_ACCOUNT_NO = cust2acct.ztag__acct_number and SUBSTR(criss_integrated1.MCT_ACCOUNT_TYPE,1,2) = SUBSTR(cust2acct.ztag__acct_type,1,2) and
+		  criss_integrated1.act2_account_bank_number = cust2acct.ztag__acct_bank_number
+		 
+	) criss_integrated
+	
+	left outer join
+	 ${hv_db_etl}.CIF_PNC_IMS_CUST2CUST cust2cust
+	 on criss_integrated.ztag_keymaster= cust2cust.ztag__rel_keymaster and cust2cust.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+	 
+	left outer join
+	  ${hv_db_etl}.CIF_PNC_IMS_CUSTOMER customer
+	  On criss_integrated.ztag_keymaster = customer.ztag__perm_key
+	  and customer.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+	  
+	left outer join
+	  ${hv_db_etl}.DDA_PNC_HOGAN_MASTER master
+	  On criss_integrated.MCT_ACCOUNT_NO = master.mst_ext_key and  substring(criss_integrated.MCT_ACCOUNT_TYPE,1,1) = master.mst_ext_cif_indicator
+	  and criss_integrated.MCT_ACCOUNT_TYPE in ('DDA', 'SVG')
+	  and master.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+	  
+	left outer join
+	  ${hv_db_etl}.TDA_PNC_EXTRACT extract
+	  On criss_integrated.MCT_ACCOUNT_NO = extract.x_vk_customer_id and  criss_integrated.MCT_TDA_ACCT_NO = extract.x_vk_certificate_number_1
+	  and extract.load_date = ${lastPreviousDayBusinessday_yyyy_mm_dd}
+	  
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related   employee
+	  on criss_integrated.MCT_ACCOUNT_NO = employee.c2a_account_number and SUBSTR(MCT_ACCOUNT_TYPE,1,2)  = SUBSTR(employee.c2a_account_type,1,2) 
+	  and  criss_integrated.act2_account_bank_number =  employee.c2a_account_bank_number 
+	  
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related  employee1
+	  on criss_integrated.ddaf074_toacct = employee1.c2a_account_number and criss_integrated.ddaf074_tomkt = employee1.c2a_account_bank_number
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee2
+	  on criss_integrated.ddaf071_toacct = employee2.c2a_account_number  and criss_integrated.ddaf071_tomkt = employee2.c2a_account_bank_number
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee3
+	  on criss_integrated.ddaf076_toacct = employee3.c2a_account_number and criss_integrated.ddaf076_tomkt = employee3.c2a_account_bank_number
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee4
+	  on criss_integrated.ddaf072_toacct = employee4.c2a_account_number and criss_integrated.ddaf072_tomkt = employee4.c2a_account_bank_number
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee41
+	  on criss_integrated.fxrf001_toacctnb = employee41.c2a_account_number and criss_integrated.fxrf001_tobnkid = employee41.c2a_account_bank_number
+	  
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee5
+	  on criss_integrated.ddaf073_toacct1 = employee5.c2a_account_number and criss_integrated.ddaf073_tobank1 = employee5.c2a_account_bank_number
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee6
+	  on criss_integrated.ddaf077_toacct1 = employee6.c2a_account_number and criss_integrated.ddaf077_tobank1 = employee6.c2a_account_bank_number
+	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee7
+	  on criss_integrated.ddaf073_toacct2 = employee7.c2a_account_number and criss_integrated.ddaf073_tobank2 = employee7.c2a_account_bank_number
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee8
+	  on criss_integrated.ddaf077_toacct2 = employee8.c2a_account_number and criss_integrated.ddaf077_tobank2 = employee8.c2a_account_bank_number
+	
+	-- mem_is_empl_related_xfer_acct
+	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee9
+	  on criss_integrated.cdaf061_acctnbr = employee9.c2a_account_number and criss_integrated.fxrf001_tobnkid = employee9.c2a_account_bank_number	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee10
+	  on criss_integrated.cdaf071_acctnbr = employee10.c2a_account_number and criss_integrated.fxrf001_tobnkid = employee10.c2a_account_bank_number	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee11
+	  on criss_integrated.ddaf122_acctnbr = employee11.c2a_account_number and criss_integrated.fxrf001_tobnkid = employee11.c2a_account_bank_number	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee12
+	  on criss_integrated.clcf093_acctnbr = employee12.c2a_account_number and criss_integrated.fxrf001_tobnkid = employee12.c2a_account_bank_number	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee13
+	  on criss_integrated.csvf037_acctnbr_01 = employee13.c2a_account_number and criss_integrated.fxrf001_tobnkid = employee13.c2a_account_bank_number	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee14
+	  on lpad(criss_integrated.cdaf074_xfr_acct, 20, "0") = employee14.c2a_account_number and criss_integrated.cdaf074_xfr_type = employee14.c2a_account_type	
+	left outer join
+	  ${hv_db_efgifi_wrk}.CRISS_Employee_related employee15
+	  on lpad(criss_integrated.reaf074_xfr_acct, 20, "0") = employee15.c2a_account_number and criss_integrated.reaf074_xfr_type = employee15.c2a_account_type	
+
+ ) criss_integrated1
+) criss_integrated where criss_integrated.RIND =1;
+;
