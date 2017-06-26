@@ -29,7 +29,11 @@ object SparkStreamWindow {
     //val count = lines1.flatMap(x => x._1.split(" ")).map(x => (x,1)).reduceByKey(_+_)
     //lines1.count()
     val linesReduce = lines.reduceByWindow((x,y) => x+y, Seconds(15), Seconds(10))
+    linesReduce.print
+    val countByWindow = lines.countByWindow(Seconds(15), Seconds(10))
+    countByWindow.print
     val count =lines.flatMap(x => x.split(" ")).map(x => (x,1)).reduceByKey(_+_)
+    
     count.print()
       //count.print()
     ssc.start()
