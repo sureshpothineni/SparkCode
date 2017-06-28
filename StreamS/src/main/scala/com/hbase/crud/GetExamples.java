@@ -13,7 +13,7 @@ import org.apache.hadoop.hbase.conf.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 
-public class GetExamples1 {
+public class GetExamples {
 	public static void main(String[] args) throws IOException {
 		Configuration conf = HBaseConfiguration.create();
 		conf.addResource(new Path("/etc/hbase/conf/hbase-site.xml"));
@@ -25,15 +25,23 @@ public class GetExamples1 {
 		
 		Table table = connection.getTable(TableName.valueOf("drwhd01q:test"));
 		
-		table.incrementColumnValue(Bytes.toBytes("row12"), Bytes.toBytes("cf1"), Bytes.toBytes("col9"),1L);
+		byte[] b = Bytes.toBytes(1);
+		table.incrementColumnValue(Bytes.toBytes("row13"), Bytes.toBytes("cf1"), Bytes.toBytes("col9"),3L);
 
-		Get get = new Get(Bytes.toBytes("row11"));
-		get.addFamily(Bytes.toBytes("cf1"));
+		Get get = new Get(Bytes.toBytes("row13"));
+		get.addColumn(Bytes.toBytes("cf1"),Bytes.toBytes("col9"));
 		
 		Result r = table.get(get);
 		
-		/*String col1Value = Bytes.toString(r.getValue(Bytes.toBytes("cf1"), Bytes.toBytes("col10")));
-		String col2Value = Bytes.toString(r.getValue(Bytes.toBytes("cf1"), Bytes.toBytes("col9")));
+		Delete d = new Delete(Bytes.toBytes("row3"));
+		d.addColumn(Bytes.toBytes("cf1"), Bytes.toBytes("col1"));
+		table.delete(d);
+		
+		String col1Value = Bytes.toString(r.getValue(Bytes.toBytes("cf1"), Bytes.toBytes("col9")));
+		System.out.println(col1Value);
+		System.out.println(Long.valueOf(col1Value));
+		
+		/*String col2Value = Bytes.toString(r.getValue(Bytes.toBytes("cf1"), Bytes.toBytes("col9")));
 		
 		System.out.println("col1Value :"+col1Value+":col2Value :"+col2Value);
 		StringTokenizer tokens = new StringTokenizer(col1Value,":");
