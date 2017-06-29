@@ -1,0 +1,95 @@
+For HBase, this is expected as no requirements were provided to setup the Hbase environment.
+
+For HBase security,  by default, you do not have privilege in HBase. The platform admin will need to create HBase namespaces (simila
+r concept as databases) then assign privilege on them to groups. We can create a namespace for your team and let you know when you c
+an try again, please provide details of what the namespace should be and what group(s) should have what permissions.
+
+For kafka, it is secured by kerberos and therefore you have to set up extra configuration as provided by Marlo below.
+
+Kafka
+
+Step 1)  Create jaas.conf file in your home dir
+cd ~
+vi jaas.conf
+
+Paste the following then save:
+
+KafkaClient {
+com.sun.security.auth.module.Krb5LoginModule required
+useTicketCache=true;
+};
+Client {
+com.sun.security.auth.module.Krb5LoginModule required
+useTicketCache=true;
+};
+
+Step 2) create client.properties file in your home dir
+
+cd ~
+vi client.properties
+
+Paste the following then save:
+
+security.protocol=SASL_PLAINTEXT
+sasl.kerberos.service.name=kafka
+
+Step 3) To test, create a topic, launch a producer client and a consumer client
+
+Create a topic:
+
+/usr/bin/kafka-topics --list --zookeeper lbdp152a.uat.pncint.net:2181,lbdp153a.uat.pncint.net:2181,lbdp165a.uat.pncint.net:2181
+
+/usr/bin/kafka-topics --create --topic test1 --partitions 2 --replication-factor 2 --zookeeper lbdp152a.uat.pncint.net:2181,lbdp153a.uat.pncint.net:2181,lbdp165a.uat.pncint.net:2181
+xx62883
+rt KAFKA_OPTS="-Djava.security.auth.login.config=/home/pl24116/jaas.conf"
+
+/usr/bin/kafka-console-producer --topic uat_test_topic_1 --producer.config client.properties --broker lbdp155a.uat.pncint.net:9092
+
+
+Consumer:
+
+export KAFKA_OPTS="-Djava.security.auth.login.config=/home/pl24116/jaas.conf"
+
+/usr/bin/kafka-console-consumer --new-consumer --topic uat_test_topic --from-beginning --bootstrap-server  lbdp155a.uat.pncint.net:9
+092 --zookeeper lbdp152a.uat.pncint.net:2181,lbdp153a.uat.pncint.net:2181,lbdp165a.uat.pncint.net:2181 --consumer.config client.prop
+erties
+
+kafka-console-producer --broker-list lbdp155a.uat.pncint.net:9092 --topic uat_test_topic_2
+kafka-console-consumer --zookeeper lbdp155a.uat.pncint.net:2181 --bootstrap-server lbdp155a.uat.pncint.net:9092 --topic uat_test_topic_2 --from-beginning
+
+Testing:
+------
+kafka-console-producer --broker-list lbdp155a.uat.pncint.net:9092 --topic test1 --producer.config client.properties
+kafka-console-consumer --new-consumer --topic test1 --from-beginning --bootstrap-server lbdp155a.uat.pncint.net:9092 --consumer.config client.properties
+
+kafka-console-consumer --new-consumer --topic test1 --from-beginning --bootstrap-server lbdp155a.uat.pncint.net:9092 --consumer.config client.properties
+
+
+--class com.spark.drw.MergeFilesText Spark-0.0.1-DRW.jar q drw_prjct_sts_1 --files /etc/hive/conf/hive-site.xml 
+spark-submit --class com.spark.stream.SparkKafkaStream Spark-0.0.1-CIM.jar --master yarn \
+--conf "spark.executor.extraJavaOptions=-Djava.security.auth.login.config=jaas.conf" \
+--files "jaas.conf" \
+
+
+==================
+from Neerja Khattar (internal) to Everyone:
+kafka-console-producer --broker-list <anybroker>:9092 --topic test1 
+--producer.config client.properties
+from Neerja Khattar (internal) to Everyone:
+export KAFKA_OPTS="-Djava.security.auth.login.config=/home/user/jaas.conf"
+from Neerja Khattar (internal) to Everyone:
+kafka-console-consumer --new-consumer --topic test1 --from-beginning 
+--bootstrap-server <anybroker>:9092 --consumer.config client.properties
+from Neerja Khattar (internal) to Everyone:
+KafkaClient {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true
+keyTab="/etc/security/keytabs/kafka_server.keytab"
+principal="kafka/kafka1.hostname.com@EXAMPLE.COM";
+};
+from Neerja Khattar (internal) to Everyone:
+https://kafka.apache.org/090/javadoc/index.html?org/apache/kafka/clients/consumer/KafkaConsumer.html
+===========================
+
+kafka-console-producer --broker-list lbdp004a:9092 --topic testTopic1
+kafka-console-consumer --zookeeper lbdp002a:2181 --topic testTopic1 
