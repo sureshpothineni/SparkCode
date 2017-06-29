@@ -1,0 +1,151 @@
+
+PROD SQOOP EVAL Testing:
+===============================
+ADAPT:
+======
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:teradata://T320db/DATABASE=ADATD01P_ADAPT_DM" \
+--query " select count(*) from  ADATD01P_ADAPT_DM.cif_customer_full" \
+--username pl19775 \
+--password-alias "p1_adapt_dm_pl19775"
+
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:teradata://T320db/DATABASE=ADATD01P_ADAPT_DM" \
+--query " select top 1 from ADATD01P_ADAPT_DM.cif_customer_full" \
+--username pl19775 \
+--password-alias "p1_adapt_dm_pl19775"
+
+teradata_username_d1_dqatd01d_rtm_t
+
+Teradata: Getting Metadata
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/XX64936.jceks -Doozie.sqoop.log.level=ERROR 
+--connect "jdbc:teradata://tc101db/DATABASE=DQATD01D_RTM_T" 
+--query " select tablename, columnname, ColumnLength, columntype,DecimalTotalDigits, DecimalFractionalDigits, columnid from dbc.columnsV   where databasename= 'DQATD01D_RTM_T' and tablename in ( 'DRW_PRJCT_SRC_1792223' ) and \$CONDITIONS order by tablename, columnid" 
+--m 1 
+--target-dir temp/sqoop/datasource/ 
+--username XX64936 
+--password-alias "d1_dqatd01d_rtm_t_xx64936"
+
+Oracle: Getting Metadata
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=cimdmp.pncbank.com)(PORT=1535))(CONNECT_DATA=(SERVICE_NAME=CIMDB02P)))" \
+--query " select table_name as TableName,column_name as ColumnName, data_length as ColumnLength,data_type as ColumnType, nvl(data_precision,data_length) as DecimalTotalDigits, nvl(data_scale,0) as DecimalFractionalDigits, a.column_id as ColumnId, a.nullable from sys.all_tab_columns a where table_name in ( 'TIME_DIM' ) and owner = 'CIM_OBIEE' and \$CONDITIONS order by TableName,ColumnId" \
+--m 1 --target-dir temp/sqoop/datasource2/ --username pl19775 \
+--password-alias "p1_cimdb02p_pl19775"
+
+DB2:
+QA:
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XACEMV1.jceks \
+--connect "jdbc:db2://m-db2-db2v-qa.pncint.net:5170/PGH_DB2V"   \
+--username XACEMV1 -password-alias "xacemv1" --query "select count(1) from \$VCCTCDB.CPLRPT3"
+UAT:
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XABDHT1.jceks  --connect "jdbc:db2://m-db2-db2t-uat.pncint.net:5101/PGH_DB2V" --username XABDHT1 --password-alias "xabdht1" --query "select count(1) from \$DGNXCSA.GNX_AUDIT_READ"
+
+sqoop list-databases -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XABDHT1.jceks  --connect "jdbc:db2://m-db2-db2t-uat.pncint.net:5101/PGH_DB2T" --username XABDHT1 --password-alias "xabdht1"
+sqoop list-tables -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XABDHT1.jceks  --connect "jdbc:db2://m-db2-db2t-uat.pncint.net:5101/PGH_DB2T" --username XABDHT1 --password-alias "xabdht1"
+
+
+sqoop list-databases -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XSBDHQROD.jceks  --connect "jdbc:sqlserver://dtgtcsqb05.pncbank.com:1435;databaseName=rodsdb01t_dev" --username XSBDHQROD --password-alias "XSBDHQROD"
+sqoop list-databases -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XSBDHQROD.jceks  --connect "jdbc:sqlserver://dtgqcsqb05.pncbank.com:1435;databaseName=ROD" --username XSBDHQROD --password-alias "XSBDHQROD"
+
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XSBDHQROD.jceks  --connect "jdbc:sqlserver://dtgtcsqb05.pncbank.com:1435;databaseName=rodsdb01t_dev" --username XSBDHQROD --password-alias "XSBDHQROD" --query "use rodsdb01t_dev;EXEC sp_help 'view_itrust';"
+
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/XABDHT1.jceks  --connect "jdbc:db2://m-db2-db2t-uat.pncint.net:5101/PGH_DB2V" --username XABDHT1 --password-alias "xabdht1" --query "select count(1) from \$DGNXCSA.GNX_AUDIT_READ"
+
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=cimdmp.pncbank.com)(PORT=1535))(CONNECT_DATA=(SERVICE_NAME=CIMDB02P)))" \
+--query " select table_name as TableName,column_name as ColumnName, data_length as ColumnLength,data_type as ColumnType, nvl(data_precision,data_length) as DecimalTotalDigits, nvl(data_scale,0) as DecimalFractionalDigits, a.column_id as ColumnId, a.nullable from sys.all_tab_columns a where table_name in ( 'TIME_DIM' ) and owner = 'CIM_OBIEE' and \$CONDITIONS order by TableName,ColumnId" \
+--m 1 --target-dir temp/sqoop/datasource2/ --username pl19775 --password-alias "p1_cimdb02p_pl19775"
+
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=IMGDBP01.PNCBANK.COM)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=IMGDB01P)))" \
+--query " select table_name as TableName,column_name as ColumnName, data_length as ColumnLength,data_type as ColumnType, nvl(data_precision,data_length) as DecimalTotalDigits, nvl(data_scale,0) as DecimalFractionalDigits, a.column_id as ColumnId, a.nullable from sys.all_tab_columns a where table_name in ( 'fact_insight_appt_setting' ) and owner = 'IMG_OBIEE' and \$CONDITIONS order by TableName,ColumnId" \
+--m 1 --target-dir temp/sqoop/datasource2/ --username PL19775 \
+--password-alias "p1_imgdb01p_pl19775"
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=LRTL337DZ-SCAN.PROD.PNCINT.NET)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=CIODB02P.PROD.PNCINT.NET)))" \
+--query " select * from sys.all_tab_columns a where owner = 'CIODB02P'  " \
+--username  PL19775 \
+--password-alias "p1_ciodb02p_pl19775"
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=LRTL29HDZ-SCAN.QA.PNCINT.NET)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=CIODB01Q.QA.PNCINT.NET)))" \
+--query " select count(*) from CIODB02P.time_dim" \
+--username  PL19775 \
+--password-alias "p1_cimdb02p_pl19775"
+
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/bdh/EDWTD01P_BDHPROD_SRVC1.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:teradata://TC301DB/DATABASE=DQATD01D_RTM_T" \
+--query " select top 1 from DQATD01D_RTM_T.drw_prjct_metadata" \
+--username EDWTD01P_BDHPROD_SRVC1 \
+--password-alias "EDWTD01P_BDHPROD_SRVC1"
+
+QA:
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/keystore/drw/DQATD01D_ETL_SRVC1.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:teradata://TC101DB/DATABASE=DQATD01D_RTM_T" \
+--query " select top 1 from DQATD01D_RTM_T.drw_prjct_metadata" \
+--username DQATD01D_ETL_SRVC1 \
+--password-alias "dqatd01d_etl_srvc1"
+
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/XX68669.jceks  -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=STVDB03Q.qa.pncint.net)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=STVDB03Q)))" \
+--query " select count(*) from DQATD01D_RTM_T.drw_prjct_metadata" \
+--username xx68669 \
+--password-alias "p1_stvdb03q_xx68669"
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/XX68669.jceks --connect jdbc:oracle:thin:@//lcmz299-scan.QA.PNCINT.NET:1521/STVDB03Q.qa.pncint.net --username XX68669  --password-alias q1_stvdb03q_xx68669 --query "select count(*) from MANTAS.KDD_CAL" 
+
+Date : 2016-11-15
+int: 20161115
+
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/PL19775.jceks -Doozie.sqoop.log.level=ERROR --connect "jdbc:teradata://T320db/DATABASE=ADATD01P_ADAPT_DM" --query " select tablename, columnname, ColumnLength, columntype,DecimalTotalDigits, DecimalFractionalDigits, columnid from dbc.columnsV   where databasename = 'DLADA2CLV' and tablename in ( 'AGR_ACCOUNTS' ) and \$CONDITIONS order by tablename, columnid" --m 1 --target-dir temp/sqoop/datasource/ --username PL19775 --password-alias "p1_adapt_dm_pl19775"
+
+sqoop import \
+--connect "jdbc:teradata://TC101DB/DATABASE=DQATD01D_RTM_T" \
+--table drw_prjct_src_1792223
+--target-dir hdfs://bdp-isilonqa01.qa.pncint.net:8020/bdpq/drw/01/str/raw/drwhd01q_raw/drw_prjct_src_1792223_comma
+--username  xx64936 -P \
+--m 1
+
+--password "QWCU#80DFCL"
+
+
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/XX64936.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:teradata://TC101DB/DATABASE=DQATD01D_RTM_T" \
+--table drw_prjct_src_1792223 \
+--target-dir /bdpq/drw/01/str/raw/drwhd01q_raw/drw_prjct_src_1792223_comma_1 \
+--split-by prjct_id \
+--username xx64936 \
+--password-alias "d1_dqatd01q_rtm_t_xx64936" \
+--m 1
+
+
+hdfs_service_keystore_root=/keystore
+hdfs_common_keystore_root=/tmp/sqoopstaging/keystore
+hdfs_user_keystore_root=/user/${USER}
+
+
+
+CIM:
+
+sqoop eval -Dhadoop.security.credential.provider.path=jceks://hdfs//tmp/sqoopstaging/keystore/XX68746.jceks -Doozie.sqoop.log.level=ERROR \
+--connect "jdbc:teradata://TC301DB/DATABASE=ADATD01P_ADAPT_DM" \
+--query " select top 1 * from ADATD01P_ADAPT_DM.CUST_ACCOUNT_RELATIONSHIP" \
+--username  XX68746 \
+--password-alias "adatd01p_adapt_dm_xx68746"
+
+
+
+
+
+sqoop import -Dhadoop.security.credential.provider.path=jceks://hdfs/tmp/sqoopstaging/keystore/XX64936.jceks -Doozie.sqoop.log.level=ERROR 
+--connect "jdbc:teradata://tc101db/DATABASE=DQATD01D_RTM_T" 
+--query " select tablename, columnname, ColumnLength, columntype,DecimalTotalDigits, DecimalFractionalDigits, columnid from dbc.columnsV   where databasename = 'DQATD01D_RTM_T' and tablename in ( 'DRW_PRJCT_SRC_1792223' ) and \$CONDITIONS order by tablename, columnid"
+--m 1 --target-dir temp/sqoop/datasource/ --username XX64936 --password-alias "d1_dqatd01d_rtm_t_xx64936"
