@@ -1,0 +1,128 @@
+Type Parameters:
+	Pass by Value : It will evaluate all the times. Adavantage: it avoids repeated evaluation of arguments.
+		Ex: def function(x: Int, y:Int) = x
+			function(1, loop) = returns infinite loop
+			function(loop, 1) = returns infinite loop
+	Pass By Name: It will evaluate when it called. Advantage: It avoids evaluation of arguments.
+		Ex: def function(x: Int, y: => Int) = x
+			function(1, loop) = returns 1
+			function(loop, 1) = returns infinite loop
+
+Polymorphism:
+	2 types:
+		1) Sub Typing
+		2) Generics
+	
+	Generics:
+		bounds:
+			<: -> Upper Bound
+			>: -> Lower Bound
+			S <: T, s is sub type of T (T is Super Class, S is Sub Class)
+			S >: T, T is sub type of S (S is Super Class, T is Sub Class)
+			
+			[S >: NonEmpty <: IntSet] - Combain both
+		varience:
+			val a : Array[NonEmpty] = Array(new NonEmpty())
+			val b : Array[Empty] = a   ---> This line will fail due to Array's are not covarient
+			b(0) = Empty
+			val x: NonEmpty = a(0)
+			In scala Array's are not covarient
+			
+			List --> covarient, because List's are immutable.
+			Array --> not covarient, because Array's are mutable.
+			
+			C[A] <: C[B] : covarient
+			C[A] >: C[B] : convarient
+			neither C[A] nor C[B] is subtype of the other : invarient
+			
+			Scala let you declare the varience type:
+			class C[+A]  -> covarient  --> can appear in method results
+			class C[-A]  -> convarient --> can appear in method parameters
+			class C[A]   -> invarient --> Can appear any where
+			
+			Covarient rules are prevent to multable operations on classes.
+
+Type Casting:
+	isInstanceOf[T] - returns Boolean
+	asInstanceOf[T] : T
+
+Case Class:
+
+	case class Number(n: Int) extends expr
+	
+	Scala compiler create the following representation:
+	object Number {
+		def apply(n: Int) = new Number(n)  --> Companian methods. (Factory Methods)
+	}
+
+Pattern Matching:
+	def eval(e : Expr) = e match {
+		case pat1 => exp1
+		case pat2 => exp2
+	}
+
+	If nothing matching will throw MatchError
+
+Collections:
+	List:
+	Lists are recursive and immutable
+	
+	val x : List[Int] = List(1,2,3,4)
+	val y : List[String] = List("" ,"" ,"")
+	
+	:: --> cons
+	x :: xs --> gives you new list
+	
+	length, head, tail, init, take, drop, reverse, ++, update (mutable) , indexof, contains
+	
+	Concating 2 lists: ys ::: xs same as ys .::: (xs)
+
+Split:
+	
+	Pair: val pair = ("answer",42)
+
+Implicit:
+
+List High Order Fucntions:
+	map, filter, filterNot, partition, takewhile, dropwhile, span
+	reduceLeft, foldLeft, reduceRight, foldRight
+	
+	Diff" ReduceLeft & FoldLeft: FoldLeft is used for empty list
+	
+	RemoveAt, reverse, concat
+		
+	scala.math.Ordering
+	Ordering.Int, Ordering.String
+	
+Vector:
+	Vector is better when you want to filter, map or finding an value. List are usefull for iterations.
+	Vector stores 32 elements if 32 elements are completed then it create 32 * 32 depth elements.
+			1,2,3, ..... 32 (1st Row)
+		1,2,3...32 1,2,...32 .............. 32 blocks (each block contains 32 elements) 2nd row  32 * 32 = 1024 elements 2 power 10
+	Depth of vector is log32 (N)	
+Range:
+	1 until 5
+	1 to 5
+	
+		Seq - Super Class
+List ,   Vector,   Range (Sub Classes)
+
+Useful methods: exists, forall, zip (Use for pair 2 lists), unzip, flatMap, 
+
+Set:
+	Set's are unordered, doesn't have duplicates
+	
+Map:
+	Key, Value
+	Maps are functions & Classes.
+	val x = Map("Santa Clara" -> "California", "Cleveland" -> "Ohio")
+	x("SantaClara") : this is example of Map Functions Output: Some(California)
+	x("Columbus") : Output: None
+	
+	Some(California), None are options.
+	
+	
+
+
+	
+	

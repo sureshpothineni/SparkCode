@@ -1,0 +1,5 @@
+Python Learning:
+two types of airthemetic: int, float type(10) -> Int type, type(10.0) -> float
+int, string, float, functions, None are types
+
+Collections: tuple - immutable, list - mutable, dictionary

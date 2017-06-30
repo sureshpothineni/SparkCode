@@ -1,0 +1,108 @@
+This works on interim DEV. May not work in new Dev (we may have to make some tweaks because of Kerberos)
+Replace xx62883 with your ID.
+
+The HBase table with one column family  cf1  needs to be created before running the application.
+
+This application is a Spark Streaming application that reads data from the SparkSink of a Flume Agent
+The Flume Agent has a Kafka source that reads data from Kafka Topic firstTopic1
+The Flume Agent writes to the SparkSink and to the KafkaSink with Topic testTopic1
+The application receives the source data in batches of 10 seconds.
+For every batch,
+1. Prints the data to the screen
+2. Writes the data to HDFS at /user/<your_userid>/spk
+3. Writes the data to a HBase table named spk (only first 3 columns from source are used : key, column_1 and column_2)
+
+# Step 1 : Start the flume agent from /home/<your_userid>/nrt.
+# ----------------------------------------------------------
+# The nrt.config flume config file should be in /home/<your_userid>/nrt
+# The plugins.d/lib directory under /home/<your_userid>/nrt should contain the following 3 jars
+# commons-lang3-3.1.jar
+# scala-library-2.10.4.jar
+# spark-streaming-flume-sink_2.10-1.5.0-cdh5.5.0.jar
+#
+# Flume Agent Command
+flume-ng agent -c flm_conf -f nrt.config -name ag_nrt --plugins-path /home/xx62883/nrt
+
+# Step 2 : Submit Spark Streaming application using following command from the project/target directory
+# ----------------------------------------------------------
+# Compile the Spart Streaming code and place the jar file in /home/<your_userid>/nrt
+#
+# The following jars need to be provided to the spark-submit command
+# spark-streaming-flume_2.10-1.5.0-cdh5.5.0.jar
+# spark-streaming-flume-sink_2.10-1.5.0-cdh5.5.0.jar
+#
+# Create a directory named log in /home/xx62883/nrt  to store the flume log while running the flume agent
+
+# Create a directory named flume_conf in /home/xx62883/nrt
+# go to /home/xx62883/nrt/flume_conf and copy these 2 files from /etc/flume-ng/conf
+#  flume-env.sh
+#  log4j.properties
+#
+#  In flume-env.sh uncomment the last line and set FLUME_CLASSPATH=/home/xx62883/<your_userid>/nrtlib
+#  In log4j.properties set flume.log.dir=log
+#
+#
+# Place the above 2 jars in a directory such as /home/<your_user_id>/nrt/nrtlib and give the full path as follows
+spark-submit --class com.aaa.sparknrt.StreamNRT --master local[4] --jars /home/xx62883/nrt/nrtlib/spark-streaming-flume_2.10-1.5.0-c
+dh5.5.0.jar,/home/xx62883/nrt/nrtlib/spark-streaming-flume-sink_2.10-1.5.0-cdh5.5.0.jar  SparkNRT-0.0.1-SNAPSHOT.jar  10 lbdp003a /u
+ser/xx62883/spk/nrt_ spk lbdp002a:2181
+
+(Note parameters to the jar file above are    batchDurationSecs FlumeHost hdfsLoc HBaseTable zookeeperHost )
+
+# Step 3 : Generate transactions and write to Kafka Topic firstTopic1
+# -------------------------------------------------------------------
+te a Kafka Topic, use
+# kafka-topics  --create --zookeeper lbdp002a:2181 --replication-factor 1 --partition 1 --topic firstTopic1
+# To List the Topics, use
+# kafka-topics --list --zookeeper lbdp002a:2181
+#Kafka Console Producer Command (Use the gen_transactions.py for better testing)
+# Type 3 fields per line. Fields should be separated by pipe
+kafka-console-producer --broker lbdp004a:9092 --topic firstTopic1
+
+
+
+spark-submit --class com.aaa.ScalaS.WC --master local[4] StreamS-0.0.1-SNAPSHOT.jar /user/xx68746/input.txt 
+
+spark-submit --class com.spark.drw.MergeFilesQdt Spark-0.0.1-DRW.jar q --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.DRWCopyFiles Spark-0.0.1-DRW.jar q --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.CIMSparkCode Spark-0.0.1-DRW.jar q tableName --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.TestFiles_1 Spark-0.0.1-DRW.jar drw_prjct_sts_1 --spark.yarn.queue root.drw.med --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.TestFiles_1 Spark-0.0.1-DRW.jar drw_prjct_sts_2 --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.MergeFilesText Spark-0.0.1-DRW.jar q drw_prjct_sts_1 --files /etc/hive/conf/hive-site.xml 
+
+spark-submit --class com.spark.drw.DRWCopyFiles_1 Spark-0.0.1-DRW.jar q drw_prjct_sts_test_1 --files /etc/hive/conf/hive-site.xml
+
+spark-submit --class com.spark.stream.SparkKafkaLog Spark-0.0.1-CIM.jar --files /etc/hive/conf/hive-site.xml
+
+kafka-console-producer --broker-list lbdp004a:9092 --topic testTopic1
+kafka-console-consumer --zookeeper lbdp002a:2181 --topic testTopic1 
+
+flume-ng agent -f ifi.config  -n ag_ifi
+
+HBase:
+export HADOOP_CLASSPATH="$HADOOP_CLASSPATH:/opt/cloudera/parcels/CDH-5.5.2-1.cdh5.5.2.p1368.1322/jars/*"
+hadoop jar /home/pl24116/SparkHBase-1.0-SNAPSHOT.jar com.hbase.crud.PutExamples
+hadoop jar /home/pl24116/SparkHBase-1.0-SNAPSHOT.jar com.hbase.crud.MultiplePutExamples
+hadoop jar /home/pl24116/SparkHBase-1.0-SNAPSHOT.jar com.hbase.crud.GetExamples
+
+spark-submit --class com.spark.drw.TestFiles_1 Spark-0.0.1-DRW.jar --files /etc/hive/conf/hive-site.xml --jars TCLIServiceClient.jar ql.jar ImpalaJDBC4.jar libfb303-0.9.0.jar libthrift-0.9.0.jar 
+
+spark-submit --jars ImpalaJDBC4.jar --class com.spark.drw.TestFiles_1 Spark-0.0.1-DRW.jar --files /etc/hive/conf/hive-site.xml  libfb303-0.9.0.jar libthrift-0.9.0.jar 
+
+spark-submit --class com.spark.drw.TestFiles_1 drw_work.jar --files /etc/hive/conf/hive-site.xml
+
+ drw_pjrct_q_500269565_text
+ drw_prjct_0824_text
+ 
+impala-shell  -V -k -i bdpimp01-qa.pncint.net:21000 --ssl -s xabdpimp --quiet -B -q "refresh drwhd01q.drw_prjct_sts"
+
+impala-shell   -V -k -i bdpimp01-qa.pncint.net:21000 --ssl -s xabdpimp --quiet -B  --query="refresh drwhd01q.drw_prjct_qdt_500095665 "
+
+impala-shell -V -k -i bdpimp01-qa.pncint.net:21000 --ssl -s xabdpimp --quiet -B -q "invalidate metadata drwhd01q.drw_prjct_sts_1;"
+
+impala-shell -V -k -i bdpimp01-qa.pncint.net:21000 --ssl -s xabdpimp -q "set sync_ddl = true; use drwhd01q; invalidate metadata drw_prjct_qdt_500148565;"

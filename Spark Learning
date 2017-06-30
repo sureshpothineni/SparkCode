@@ -1,0 +1,56 @@
+      val sqlContext : SQLContext = new SQLContext(sc)
+      sqlContext.setConf("spark.sql.parquet.compression.codec","snappy")
+      
+      val hiveContext : HiveContext = new HiveContext(sc)
+      hiveContext.setConf("spark.sql.parquet.binaryAsString", "true")
+
+
+      val empDF = hiveContext.read.parquet(tableHDFSDir)
+
+      empDF.collect().foreach { x => 
+        val empId = x.get(0)
+        val empName = x.getString(1)
+        val empAdd = x.getString(2)
+        val empSal = x.get(3)
+        println ("Empd Id:"+empId +":"+empName+":"+empAdd+":"+empSal)
+      }
+
+
+    var listEmp  =  MutableList[Employee]()
+    var listEmp1 =  ListBuffer[Employee]()
+
+	
+	Spark Streaming:
+
+Values:
+1 2 3 4 5 6 7 8 9 10 11
+
+Batch Interval: 5 sec
+Window:       :15 sec
+Slide         :10 Sec
+Started at 16:08:20
+
+1 -    16:08:25
+123 -  16:08:35
+345 -  16:08:45
+567 -  16:08:55
+789 -  16:09:05
+91011 -16:09:15
+
+https://databricks.com/blog/2015/01/15/improved-driver-fault-tolerance-and-zero-data-loss-in-spark-streaming.html
+
+The streaming will execute based on slide duration and take window duration batches.
+
+Values:
+1 2 3 4 5 6 7 8 9 10 11
+
+Started at 16:08:20
+
+1 -    16:08:25
+123 -  16:08:35
+345 -  16:08:45
+567 -  16:08:55
+789 -  16:09:05
+91011 -16:09:15
+
+Example:
