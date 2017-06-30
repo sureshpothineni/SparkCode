@@ -1,0 +1,16 @@
+log4j.rootLogger=INFO
+log4j.logger.org.apache.kafka=ERROR
+log4j.logger.com.pnc.kafkaLogger=INFO,KAFKA
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%5p [%t] (%F:%L) - %m%n
+
+log4j.appender.KAFKA=kafka.producer.KafkaLog4jAppender
+log4j.appender.KAFKA.layout=org.apache.log4j.PatternLayout
+log4j.appender.KAFKA.layout.ConversionPattern=%-5p: %c - %m%n
+log4j.appender.KAFKA.BrokerList=lbdp004a.rnd.pncint.net:9092
+log4j.appender.KAFKA.host=lbdp004a.rnd.pncint.net
+log4j.appender.KAFKA.port=9092
+log4j.appender.KAFKA.Topic=testTopic1
+log4j.appender.KAFKA.syncSend=true
